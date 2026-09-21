@@ -1,0 +1,74 @@
+---
+const features = [
+	{
+		title: 'Astro pages',
+		body: 'Ship HTML by default from .astro files — layouts, slots, and zero JS until you ask for it.',
+	},
+	{
+		title: 'Svelte islands',
+		body: 'Drop interactive .svelte components where you need them, hydrated with client directives.',
+	},
+	{
+		title: 'Clear structure',
+		body: 'pages/, components/, and layouts/ stay predictable so the site grows without chaos.',
+	},
+];
+---
+
+<section class="section features" id="features" aria-labelledby="features-title">
+	<div class="container">
+		<p class="section__eyebrow">Features</p>
+		<h2 class="section__title" id="features-title">What this stack is for</h2>
+		<p class="section__lede">
+			Keep most of the UI static. Hydrate only the pieces that need client-side state.
+		</p>
+
+		<ul class="features__list">
+			{
+				features.map((feature, index) => (
+					<li class="features__item" style={`--i: ${index}`}>
+						<h3>{feature.title}</h3>
+						<p>{feature.body}</p>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.features__list {
+		list-style: none;
+		margin: 2.5rem 0 0;
+		padding: 0;
+		display: grid;
+		gap: 1.75rem;
+	}
+
+	@media (min-width: 800px) {
+		.features__list {
+			grid-template-columns: repeat(3, 1fr);
+			gap: 2rem;
+		}
+	}
+
+	.features__item {
+		padding-top: 1rem;
+		border-top: 1px solid var(--line);
+		animation: rise 650ms ease both;
+		animation-delay: calc(var(--i) * 120ms + 80ms);
+	}
+
+	.features__item h3 {
+		margin: 0 0 0.5rem;
+		font-family: var(--font-display);
+		font-size: 1.2rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+
+	.features__item p {
+		margin: 0;
+		color: var(--ink-soft);
+	}
+</style>

@@ -1,47 +1,165 @@
-# Astro Starter Kit: Basics
+# Astro Svelte
 
-```sh
-npm create astro@latest -- --template basics
-```
+Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, TanStack Query, and TypeScript.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+---
 
-## 🚀 Project Structure
+## Developer profile (read this first)
 
-Inside of your Astro project, you'll see the following folders and files:
+> When this `README.md` is shared in chat, treat it as the source of truth for the owner’s level and requirements. Update this file whenever new prefs, goals, or rules are given.
+
+### Level
+
+| Area | Level | Notes |
+| ---- | ----- | ----- |
+| Overall | **Beginner → Intermediate** | Learning by following official docs |
+| Astro | Beginner | Project structure, layouts, pages, `client:*` islands |
+| Svelte 5 | Beginner | Components, runes, hydration in Astro |
+| TypeScript | Beginner | Prefer typed props and simple types |
+| Tailwind | Beginner | Utility classes OK; keep design readable |
+| Zustand / TanStack | Beginner | Use only in **client islands** (`client:load`, etc.) |
+| Testing | Beginner | Vitest (unit/component) + Playwright (E2E) |
+
+### Language
+
+- Owner often writes in **Bangla** (or Bangla + English mix).
+- Replies can be **Bangla**, **English**, or mixed — keep explanations simple and step-by-step.
+- Prefer short answers; show code when it helps.
+
+### Requirements (must follow)
+
+1. Follow **Astro production project structure**:
+   `src/pages`, `src/layouts`, `src/components/{layout,sections,islands}`, `src/lib/{api,query,utils}`, `src/stores`, `src/styles`, `src/types`, `e2e/`.
+2. Use the **docs pattern** for Svelte in Astro:
+   ```astro
+   import BuyButton from '../components/BuyButton.svelte';
+   <BuyButton id={product.id} client:load />
+   ```
+3. Stack to use when relevant:
+   - **Astro** — pages, layouts, static UI
+   - **Svelte 5** — interactive islands
+   - **Tailwind CSS v4** — styling (see `src/styles/global.css`)
+   - **Zustand** — client state (`src/stores/`)
+   - **TanStack Query** (`@tanstack/svelte-query`) — client data fetching
+   - **Axios** (`src/lib/api/`) — HTTP client for all API calls (used inside Query `queryFn`)
+   - **TypeScript** — typed stores, libs, and `lang="ts"` in Svelte
+   - **Vitest** — unit tests + Astro Container API component tests (`src/**/*.test.ts`)
+   - **Playwright** — full-page E2E only (`e2e/`)
+   - **Icons8 Line Awesome** (`line-awesome`) — icon font; use `<i class="las la-home"></i>`
+4. Do **not** put Zustand / TanStack Query in static-only Astro markup; hydrate islands first.
+5. **Axios + Zustand + TanStack roles (must keep separate):**
+   - **Axios** = HTTP only (`src/lib/api/axios.ts`)
+   - **TanStack Query** = server state / cache (call Axios inside `queryFn` / `mutationFn`)
+   - **Zustand** = client UI + HTTP status (`authToken`, `pendingRequests`, `lastError`) — never store API response payloads in Zustand
+6. Keep the landing page structure clear: navbar, hero, sections, footer.
+7. **Testing architecture mandate (Vite-native — non-negotiable):**
+   - Legacy runners (Jest, etc.) are **out of scope**. This repo stays on the **Vite-native** stack only.
+   - **Foundation stack:** Astro + Svelte + **Vitest** + **Playwright**.
+   - **Vitest** = unit tests, store/API helpers, Astro Container API component HTML — fast ESM, TypeScript, shared Vite/Astro config.
+   - **Playwright** = full-page / cross-browser E2E only. Do **not** force Vitest to run full-page E2E.
+   - Prefer `pool: 'threads'`, isolate tests, `clearMocks` / reset store state; bound workers in CI when needed.
+   - Scale path (when needed later): Vitest projects/workspaces, tighter thread-pool memory controls, true-browser component testing (Vitest Browser Mode), and careful Svelte hydration checks — without abandoning Playwright for E2E.
+   - Goal: a robust, scalable Astro–Svelte quality gate for modern production apps.
+8. Prefer official docs when unsure:
+   - [Astro docs](https://docs.astro.build)
+   - [Astro testing](https://docs.astro.build/en/guides/testing/)
+   - [Astro + UI frameworks](https://docs.astro.build/en/guides/framework-components/)
+   - [Svelte getting started](https://svelte.dev/docs/svelte/getting-started)
+   - [TanStack Svelte Query](https://tanstack.com/query/latest/docs/framework/svelte/overview)
+   - [Axios](https://axios-http.com/docs/intro)
+   - [Vitest](https://vitest.dev/)
+   - [Playwright](https://playwright.dev/)
+9. **Package / CLI rules (always):**
+   - **Never install packages globally** (`npm install -g …` ❌).
+   - Prefer **project-local** deps in `package.json` (`npm install` / `npm install -D`).
+   - Prefer **`npx`** for one-off CLIs when available (e.g. `npx astro add …`, `npx playwright …`, `npx vitest …`) instead of global binaries.
+   - Scripts in `package.json` (`npm run …`) already use local binaries — prefer those in daily work.
+   - Keep the project portable: another machine should work after `npm install` only.
+
+### AI collaboration rules
+
+- **README is the memory file.** If the owner shares new goals, level updates, features, or preferences, **add/update them in this README** (this section), then implement.
+- Explain **why** briefly when teaching; don’t dump huge unrelated refactors.
+- Match existing file style; don’t expand scope beyond what was asked.
+- Dev server: prefer `astro dev --background` (see `AGENTS.md` / `CLAUDE.md`).
+- When adding tools/CLIs: install locally and/or use **`npx`** — do not suggest global installs.
+
+### Current goals
+
+- [x] Basic landing page (navbar, hero, sections, footer)
+- [x] Svelte islands with `client:load`
+- [x] Tailwind + Zustand + TanStack Query + TypeScript wired
+- [x] Testing setup: Vitest (unit/component) + Playwright (E2E)
+- [x] Icons8 Line Awesome icons installed
+- [x] Axios wired with Zustand + TanStack Query
+- [x] Vite-native testing mandate documented (Vitest + Playwright only)
+- [x] Production folder structure (`layout` / `sections` / `islands` / `lib/*`)
+- [ ] (Add next goals here when the owner shares them)
+
+---
+
+## Project structure
 
 ```text
 /
 ├── public/
 │   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
+├── src/
+│   ├── components/
+│   │   ├── layout/     # Navbar, Footer
+│   │   ├── sections/   # Hero, Features, HowItWorks, CallToAction
+│   │   └── islands/    # Svelte client islands (StackDemo, StartButton)
+│   ├── layouts/        # Layout.astro
+│   ├── lib/
+│   │   ├── api/        # Axios client + API modules
+│   │   ├── query/      # TanStack QueryClient + keys
+│   │   └── utils/      # helpers (useZustandStore, …)
+│   ├── pages/          # routes (index.astro)
+│   ├── stores/         # Zustand (app + http)
+│   ├── styles/         # global.css (+ Tailwind)
+│   ├── types/          # shared TypeScript types
+│   └── env.d.ts
+├── e2e/                # Playwright E2E specs
+├── astro.config.mjs
+├── vitest.config.ts
+├── playwright.config.ts
+├── svelte.config.js
+├── tsconfig.json
 └── package.json
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Stack
 
-## 🧞 Commands
+| Package | Role |
+| ------- | ---- |
+| `astro` | Framework / SSG |
+| `@astrojs/svelte` + `svelte` | UI islands |
+| `tailwindcss` + `@tailwindcss/vite` | Styling |
+| `zustand` | Client state |
+| `@tanstack/svelte-query` | Client server-state / fetching |
+| `axios` | HTTP client (API layer) |
+| `typescript` | Types |
+| `vitest` | Unit + Astro component tests |
+| `@playwright/test` | Full-page E2E |
+| `line-awesome` | Icons8 icon font |
 
-All commands are run from the root of the project, from a terminal:
+## Commands
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| Command | Action |
+| ------- | ------ |
+| `npm install` | Install dependencies |
+| `npm run dev` | Dev server → `localhost:4321` |
+| `npm run build` | Build to `./dist/` |
+| `npm run preview` | Preview production build |
+| `npm run test` | Run Vitest (unit/component) once |
+| `npm run test:watch` | Vitest watch mode |
+| `npm run test:e2e` | Run Playwright E2E |
+| `npm run test:e2e:ui` | Playwright UI mode |
+| `npm run astro ...` | Astro CLI |
 
-## 👀 Want to learn more?
+## Docs
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-#
+- [Astro project structure](https://docs.astro.build/en/basics/project-structure/)
+- [Astro framework components](https://docs.astro.build/en/guides/framework-components/)
+- [Astro testing](https://docs.astro.build/en/guides/testing/)
+- [Svelte docs](https://svelte.dev/docs/svelte/getting-started)

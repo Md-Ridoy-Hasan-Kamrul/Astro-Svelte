@@ -1,0 +1,102 @@
+---
+const steps = [
+	{
+		label: '01',
+		title: 'Compose in Astro',
+		body: 'Layouts wrap pages. Components compose the markup. Content stays close to the route.',
+	},
+	{
+		label: '02',
+		title: 'Import Svelte',
+		body: 'Bring interactive UI from .svelte files the same way you import any component.',
+	},
+	{
+		label: '03',
+		title: 'Hydrate on demand',
+		body: 'Add client:load (or another directive) only where the island needs to run in the browser.',
+	},
+];
+---
+
+<section class="section how" id="how" aria-labelledby="how-title">
+	<div class="container how__grid">
+		<div class="how__intro">
+			<p class="section__eyebrow">How it works</p>
+			<h2 class="section__title" id="how-title">Same pattern as the docs</h2>
+			<p class="section__lede">
+				Astro owns the page shell. Svelte owns interactive islands like a buy button or nav
+				menu — hydrated with a client directive.
+			</p>
+		</div>
+
+		<ol class="how__steps">
+			{
+				steps.map((step) => (
+					<li>
+						<span class="how__label">{step.label}</span>
+						<div>
+							<h3>{step.title}</h3>
+							<p>{step.body}</p>
+						</div>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<style>
+	.how {
+		background: color-mix(in srgb, var(--foam) 55%, transparent);
+		border-block: 1px solid var(--line);
+	}
+
+	.how__grid {
+		display: grid;
+		gap: 2.5rem;
+	}
+
+	@media (min-width: 900px) {
+		.how__grid {
+			grid-template-columns: 0.9fr 1.1fr;
+			align-items: start;
+			gap: 3.5rem;
+		}
+	}
+
+	.how__steps {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 1.5rem;
+	}
+
+	.how__steps li {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 1rem;
+		align-items: start;
+	}
+
+	.how__label {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: 0.95rem;
+		color: var(--sea);
+		letter-spacing: 0.04em;
+		padding-top: 0.2rem;
+	}
+
+	.how__steps h3 {
+		margin: 0 0 0.35rem;
+		font-family: var(--font-display);
+		font-size: 1.15rem;
+		letter-spacing: -0.02em;
+	}
+
+	.how__steps p {
+		margin: 0;
+		color: var(--ink-soft);
+	}
+</style>

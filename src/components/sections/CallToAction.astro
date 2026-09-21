@@ -1,0 +1,40 @@
+---
+import StartButton from '../islands/StartButton.svelte';
+---
+
+<section class="section cta" id="cta" aria-labelledby="cta-title">
+	<div class="container cta__panel">
+		<div>
+			<p class="section__eyebrow">Get started</p>
+			<h2 class="section__title" id="cta-title">Ready to mix Astro and Svelte?</h2>
+			<p class="section__lede">
+				Import a Svelte component into an Astro page and hydrate it with
+				<code>client:load</code> — just like the framework-components guide.
+			</p>
+		</div>
+		<StartButton client:load label="Read framework docs" />
+	</div>
+</section>
+
+<style>
+	.cta__panel {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: end;
+		justify-content: space-between;
+		gap: 1.75rem;
+		padding: clamp(1.75rem, 4vw, 2.5rem);
+		border: 1px solid var(--line);
+		border-radius: 0.5rem;
+		background:
+			linear-gradient(135deg, rgba(26, 107, 115, 0.1), transparent 50%),
+			var(--paper);
+	}
+
+	code {
+		font-size: 0.95em;
+		padding: 0.1em 0.35em;
+		border-radius: 0.25rem;
+		background: color-mix(in srgb, var(--foam) 70%, white);
+	}
+</style>

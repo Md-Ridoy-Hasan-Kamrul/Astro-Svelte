@@ -1,0 +1,125 @@
+---
+---
+
+<section class="hero" id="top" aria-labelledby="hero-brand">
+	<div class="hero__media" aria-hidden="true">
+		<img
+			src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1800&q=80"
+			alt=""
+			width="1800"
+			height="1200"
+			fetchpriority="high"
+		/>
+		<div class="hero__veil"></div>
+	</div>
+
+	<div class="hero__content container">
+		<p class="hero__brand" id="hero-brand">Astro Svelte</p>
+		<h1 class="hero__title">Static speed. Interactive islands.</h1>
+		<p class="hero__lede">
+			Build the page in Astro, hydrate only what needs to move with Svelte.
+		</p>
+		<div class="hero__actions">
+			<a class="btn btn--primary" href="#cta">Start building</a>
+			<a class="btn btn--ghost" href="#features">See features</a>
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		isolation: isolate;
+		min-height: min(92vh, 56rem);
+		display: grid;
+		align-items: end;
+		overflow: hidden;
+		color: #f4f8f9;
+	}
+
+	.hero__media {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+	}
+
+	.hero__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center 35%;
+		animation: drift 8s ease-in-out infinite alternate;
+	}
+
+	.hero__veil {
+		position: absolute;
+		inset: 0;
+		background:
+			linear-gradient(180deg, rgba(15, 69, 76, 0.35) 0%, rgba(20, 33, 43, 0.78) 58%, rgba(20, 33, 43, 0.92) 100%),
+			linear-gradient(90deg, rgba(20, 33, 43, 0.55), transparent 55%);
+	}
+
+	.hero__content {
+		padding-block: clamp(5rem, 14vw, 8rem) clamp(3rem, 8vw, 5rem);
+		max-width: 40rem;
+		animation: rise 700ms ease both;
+	}
+
+	.hero__brand {
+		margin: 0 0 0.85rem;
+		font-family: var(--font-display);
+		font-size: clamp(1.75rem, 5vw, 2.75rem);
+		font-weight: 800;
+		letter-spacing: -0.04em;
+		line-height: 1;
+	}
+
+	.hero__title {
+		margin: 0 0 1rem;
+		font-family: var(--font-display);
+		font-size: clamp(1.35rem, 3.2vw, 2rem);
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		line-height: 1.2;
+		color: #dce9eb;
+	}
+
+	.hero__lede {
+		margin: 0 0 1.75rem;
+		max-width: 28rem;
+		font-size: 1.1rem;
+		color: rgba(244, 248, 249, 0.86);
+	}
+
+	.hero__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 2.85rem;
+		padding: 0.65rem 1.25rem;
+		border-radius: 0.35rem;
+		font-weight: 700;
+		text-decoration: none;
+		transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+	}
+
+	.btn:hover {
+		transform: translateY(-1px);
+	}
+
+	.btn--primary {
+		background: var(--sand);
+		color: var(--ink);
+	}
+
+	.btn--ghost {
+		border: 1px solid rgba(244, 248, 249, 0.45);
+		color: #f4f8f9;
+	}
+</style>
