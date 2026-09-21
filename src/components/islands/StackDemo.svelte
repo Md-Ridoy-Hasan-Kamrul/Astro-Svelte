@@ -22,9 +22,9 @@
 			Axios · Zustand · TanStack · TypeScript
 		</h2>
 		<p class="mb-8 max-w-xl text-lg text-ink-soft">
-			Axios handles HTTP, TanStack Query caches server data, Zustand keeps client UI / request
-			status. Wired with
-			<code class="rounded bg-foam/70 px-1.5 py-0.5 text-[0.95em]">client:load</code>.
+			Axios handles HTTP, TanStack Query owns loading / error / cache, Zustand keeps client UI /
+			request status. Failed fetches stay on screen with retry — hydrated with
+			<code class="rounded bg-foam/70 px-1.5 py-0.5 text-[0.95em]">client:visible</code>.
 		</p>
 
 		<StackDemoPanel />

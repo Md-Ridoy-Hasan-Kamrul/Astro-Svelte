@@ -94,6 +94,10 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 - [x] Axios wired with Zustand + TanStack Query
 - [x] Vite-native testing mandate documented (Vitest + Playwright only)
 - [x] Production folder structure (`layout` / `sections` / `islands` / `lib/*`)
+- [x] Loading / error / retry / cache UX in the stack demo (Query + Axios + Zustand)
+- [x] Performance: client directives by priority, prefetch, `<Image>`, server island fallback
+- [x] Route cache (`Astro.cache` + `cache.enabled`) and 5-minute API TTL cache
+- [x] CI quality gate: Vitest and production build run in parallel
 - [ ] (Add next goals here when the owner shares them)
 
 ---
@@ -107,19 +111,21 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 ├── src/
 │   ├── components/
 │   │   ├── layout/     # Navbar, Footer
-│   │   ├── sections/   # Hero, Features, HowItWorks, CallToAction
-│   │   └── islands/    # Svelte client islands (StackDemo, StartButton)
+│   │   ├── sections/   # Hero, Features, HowItWorks, LiveRepo, CallToAction
+│   │   └── islands/    # Svelte client islands (StackDemo, StartButton, Navbar)
 │   ├── layouts/        # Layout.astro
 │   ├── lib/
-│   │   ├── api/        # Axios client + API modules
+│   │   ├── api/        # Axios client + API modules + TTL cache
 │   │   ├── query/      # TanStack QueryClient + keys
 │   │   └── utils/      # helpers (useZustandStore, …)
 │   ├── pages/          # routes (index.astro)
 │   ├── stores/         # Zustand (app + http)
 │   ├── styles/         # global.css (+ Tailwind)
 │   ├── types/          # shared TypeScript types
+│   ├── middleware.ts   # Cache-Control for /_astro/* assets
 │   └── env.d.ts
 ├── e2e/                # Playwright E2E specs
+├── .github/workflows/  # CI: Vitest + build in parallel
 ├── astro.config.mjs
 ├── vitest.config.ts
 ├── playwright.config.ts
@@ -143,6 +149,38 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 | `@playwright/test` | Full-page E2E |
 | `line-awesome` | Icons8 icon font |
 
+## Data fetching (loading, error, cache, speed)
+
+Roles stay split: **Axios** = HTTP, **TanStack Query** = server cache + UI flags, **Zustand** = client HTTP status (never API payloads).
+
+| Need | What to use |
+| ---- | ----------- |
+| First load | Query `isPending` → loading UI |
+| Background refresh | `isFetching` + cached `data` → keep old data, show “Updating” |
+| Run failed, no cache | `isError` && no `data` → failed panel + **Try again** (`refetch`) |
+| Run failed, cache exists | keep cached UI + error banner |
+| Cache freshness | `staleTime` 60s (fresh), `gcTime` 5 min, **Refresh cache** (`invalidateQueries`) |
+| HTTP spinner / last error | Zustand `pendingRequests` / `lastError` (Axios interceptors) |
+| Super fast | skip extra network while fresh, no refetch on tab focus, abort stale requests (`signal`) |
+
+Canceled Axios requests are not UI errors. 4xx is not retried; network / 5xx retries once.
+
+## Performance, caching, and CI
+
+Follow official Astro APIs — not `console.log` dumps or extra Redis for this app.
+
+| Practice | How this repo does it |
+| -------- | --------------------- |
+| Client JS | `Navbar` = `client:load` (above the fold). `StackDemo` = `client:visible`. `StartButton` = `client:idle`. |
+| Server islands | `LiveRepo` uses `server:defer` + `slot="fallback"` so the static page can cache while live stats load. Needs the Node adapter. |
+| Prefetch | `prefetch: { prefetchAll: true }` — hover/focus on **internal** pages (hash links and external docs are skipped). |
+| Images | Hero uses `<Image>` from `astro:assets` (WebP, srcset, no layout shift). |
+| Route cache | `cache.provider = memoryCache()`. Always wrap with `Astro.cache.enabled` before `set()` / `invalidate()`. Dev mode is never cached. |
+| API cache | `fetchAstroRepoCached()` — 5-minute in-memory TTL (one Node process). Client cache stays in TanStack Query. |
+| Asset cache | `Cache-Control: public, max-age=31536000, immutable` for `/_astro/*` (middleware + `public/_headers`). |
+| Errors | `Astro.logger.error()` on server-island fetch failure; Query **Try again** on the client. |
+| CI | GitHub Actions runs **Vitest** and **build** in parallel. `gate` job runs only if both pass. |
+
 ## Commands
 
 | Command | Action |
@@ -157,11 +195,17 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 | `npm run test:e2e:ui` | Playwright UI mode |
 | `npm run astro ...` | Astro CLI |
 
+CI (GitHub Actions): Vitest and `npm run build` run in parallel; the quality-gate job needs both.
+
 ## Docs
 
 - [Astro project structure](https://docs.astro.build/en/basics/project-structure/)
 - [Astro framework components](https://docs.astro.build/en/guides/framework-components/)
 - [Astro testing](https://docs.astro.build/en/guides/testing/)
+- [Astro prefetch](https://docs.astro.build/en/guides/prefetch/)
+- [Astro images](https://docs.astro.build/en/guides/images/)
+- [Astro server islands](https://docs.astro.build/en/guides/server-islands/)
+- [Astro route caching](https://docs.astro.build/en/guides/caching/)
 - [Svelte docs](https://svelte.dev/docs/svelte/getting-started)
 
 ## Troubleshooting

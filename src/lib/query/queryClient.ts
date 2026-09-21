@@ -1,11 +1,19 @@
 import { QueryClient } from '@tanstack/svelte-query';
+import { isRetryableQueryError } from '../api/axios';
 
 export function createAppQueryClient() {
 	return new QueryClient({
 		defaultOptions: {
 			queries: {
+				// Fresh for 1 min → extra refetches (tab focus) skip the network.
 				staleTime: 60_000,
-				retry: 1,
+				// Keep unused cache 5 min so back-navigation is instant.
+				gcTime: 5 * 60_000,
+				retry: (failureCount, error) =>
+					isRetryableQueryError(error) && failureCount < 1,
+				retryDelay: (attempt) => Math.min(400 * 2 ** attempt, 2_000),
+				refetchOnWindowFocus: false,
+				refetchOnReconnect: true,
 				// Astro islands only run queries in the browser.
 				enabled: typeof window !== 'undefined',
 			},

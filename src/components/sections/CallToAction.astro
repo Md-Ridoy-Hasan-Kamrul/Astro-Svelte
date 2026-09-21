@@ -8,11 +8,12 @@ import StartButton from '../islands/StartButton.svelte';
 			<p class="section__eyebrow">Get started</p>
 			<h2 class="section__title" id="cta-title">Ready to mix Astro and Svelte?</h2>
 			<p class="section__lede">
-				Import a Svelte component into an Astro page and hydrate it with
-				<code>client:load</code> — just like the framework-components guide.
+				Import a Svelte component into an Astro page and hydrate it with the matching
+				<code>client:*</code> directive — <code>load</code> above the fold,
+				<code>visible</code> / <code>idle</code> below.
 			</p>
 		</div>
-		<StartButton client:load label="Read framework docs" />
+		<StartButton client:idle label="Read framework docs" />
 	</div>
 </section>
 

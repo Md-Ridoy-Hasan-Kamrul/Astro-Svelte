@@ -31,6 +31,7 @@
 		<nav id="site-menu" class="nav__links" class:open aria-label="Primary">
 			<a href="#features" onclick={close}>Features</a>
 			<a href="#how" onclick={close}>How it works</a>
+			<a href="#live-repo" onclick={close}>Live</a>
 			<a href="#stack" onclick={close}>Stack</a>
 			<a href="#cta" onclick={close}>Get started</a>
 		</nav>

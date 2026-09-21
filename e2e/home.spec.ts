@@ -9,6 +9,7 @@ test.describe('Home landing page', () => {
 		await expect(page.getByRole('heading', { name: 'Static speed. Interactive islands.' })).toBeVisible();
 		await expect(page.locator('#features')).toBeVisible();
 		await expect(page.locator('#how')).toBeVisible();
+		await expect(page.locator('#live-repo')).toBeVisible();
 		await expect(page.locator('#stack')).toBeVisible();
 		await expect(page.locator('#cta')).toBeVisible();
 		await expect(page.getByRole('contentinfo')).toBeVisible();

@@ -1,0 +1,65 @@
+---
+import { fetchAstroRepoCached } from '../../lib/api/github';
+import { getAxiosErrorMessage } from '../../lib/api/axios';
+import type { RepoInfo } from '../../lib/api/github';
+
+let repo: RepoInfo | null = null;
+let error: string | null = null;
+
+try {
+	repo = await fetchAstroRepoCached();
+	if (Astro.cache?.enabled) {
+		Astro.cache.set({
+			maxAge: 300,
+			swr: 60,
+			tags: ['github', 'astro-repo'],
+		});
+	}
+} catch (cause) {
+	error = getAxiosErrorMessage(cause);
+	Astro.logger?.error(`Live GitHub fetch failed: ${error}`);
+}
+---
+
+<section class="section live" id="live-repo" aria-labelledby="live-repo-title">
+	<div class="container live__panel">
+		<p class="section__eyebrow">Server island</p>
+		<h2 class="section__title" id="live-repo-title">Live GitHub snapshot</h2>
+		{
+			error ? (
+				<p class="live__error" role="alert">
+					<i class="las la-exclamation-triangle" aria-hidden="true" />
+					Could not load live stats. {error}
+				</p>
+			) : repo ? (
+				<p class="section__lede">
+					<strong>{repo.full_name}</strong>
+					{' · '}
+					★ {repo.stargazers_count.toLocaleString()} stars
+					{
+						repo.language ? (
+							<>
+								{' · '}
+								{repo.language}
+							</>
+						) : null
+					}
+				</p>
+			) : null
+		}
+	</div>
+</section>
+
+<style>
+	.live__panel {
+		padding: clamp(1.25rem, 3vw, 1.75rem);
+		border: 1px solid var(--line);
+		border-radius: 0.5rem;
+		background: var(--paper);
+	}
+
+	.live__error {
+		margin: 0;
+		color: var(--accent);
+	}
+</style>

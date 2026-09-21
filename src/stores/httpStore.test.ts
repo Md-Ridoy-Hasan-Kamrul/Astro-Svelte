@@ -27,7 +27,7 @@ describe('httpStore (Axios ↔ Zustand)', () => {
 	});
 });
 
-describe('getAxiosErrorMessage', () => {
+describe('Axios error helpers', () => {
 	it('reads Axios error message', async () => {
 		const { getAxiosErrorMessage } = await import('../lib/api/axios');
 		const axios = (await import('axios')).default;
@@ -36,5 +36,32 @@ describe('getAxiosErrorMessage', () => {
 		expect(getAxiosErrorMessage(error)).toBe('Request failed');
 		expect(getAxiosErrorMessage(new Error('boom'))).toBe('boom');
 		expect(getAxiosErrorMessage('nope')).toBe('Unknown network error');
+	});
+
+	it('does not treat canceled requests as retryable UI errors', async () => {
+		const { isCanceledRequest, isRetryableQueryError, getAxiosErrorMessage } =
+			await import('../lib/api/axios');
+		const axios = (await import('axios')).default;
+
+		const canceled = new axios.AxiosError('canceled', 'ERR_CANCELED');
+		expect(isCanceledRequest(canceled)).toBe(true);
+		expect(isRetryableQueryError(canceled)).toBe(false);
+		expect(getAxiosErrorMessage(canceled)).toBe('Request canceled');
+	});
+
+	it('does not retry 4xx responses', async () => {
+		const { isRetryableQueryError } = await import('../lib/api/axios');
+		const axios = (await import('axios')).default;
+
+		const notFound = new axios.AxiosError('Not Found', 'ERR_BAD_REQUEST', undefined, undefined, {
+			status: 404,
+			statusText: 'Not Found',
+			headers: {},
+			config: {} as never,
+			data: { message: 'Not Found' },
+		});
+
+		expect(isRetryableQueryError(notFound)).toBe(false);
+		expect(isRetryableQueryError(new Error('timeout'))).toBe(true);
 	});
 });
