@@ -163,3 +163,39 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 - [Astro framework components](https://docs.astro.build/en/guides/framework-components/)
 - [Astro testing](https://docs.astro.build/en/guides/testing/)
 - [Svelte docs](https://svelte.dev/docs/svelte/getting-started)
+
+## Troubleshooting
+
+### Git: `cannot lock ref 'HEAD'` / `refs/heads/main: reference broken`
+
+**Meaning:** local branch pointer file is corrupt (not a code bug).
+
+**Fix (PowerShell, project root):**
+
+```powershell
+# 1) Confirm the error
+git status
+
+# 2) Remove broken main ref (+ lock files if present)
+Remove-Item -Force .git\refs\heads\main -ErrorAction SilentlyContinue
+Remove-Item -Force .git\refs\heads\main.lock -ErrorAction SilentlyContinue
+Remove-Item -Force .git\HEAD.lock -ErrorAction SilentlyContinue
+
+# 3) Check again
+git status
+
+# 4) Commit again from Cursor, or:
+git add -A
+git commit -m "your message"
+```
+
+**If there are already good commits** and only `main` is broken, recover from the last known commit:
+
+```powershell
+git reflog
+# copy a good commit hash, then:
+git update-ref refs/heads/main <good-commit-hash>
+git status
+```
+
+**Avoid:** putting the project inside OneDrive sync of `.git`, force-closing during commit, editing `.git` files by hand.
