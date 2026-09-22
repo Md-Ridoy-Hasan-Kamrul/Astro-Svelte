@@ -217,10 +217,14 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 
 ### How to ask the AI for a new feature
 
+**Single section বানাতে (সবচেয়ে কাজে লাগে):**
+
 1. Open [`docs/AI feature prompt.md`](docs/AI%20feature%20prompt.md).
-2. Paste the prompt into chat.
-3. Fill `[Insert Figma Link]` and `[Insert Page/Component Name]`.
-4. The AI must read **this README Sections 5–6** + **`docs/Rules for Svelte code quality.md`** before coding.
+2. Copy the **“Single section”** prompt block.
+3. Fill `[Insert Figma Link]` + `[Insert Section Name]` (e.g. `Pricing`, `Testimonials`).
+4. Paste into chat — AI must read **this README Sections 5–6** + **`docs/Rules for Svelte code quality.md`** before coding.
+
+**React নয়:** `Rules for React code quality.md` এই রেপোতে নেই। Svelte ভার্সন = `docs/Rules for Svelte code quality.md`.
 
 ## 7. Commands
 
