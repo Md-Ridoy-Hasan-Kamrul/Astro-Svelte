@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar.svelte';
+import AboutIntro from '../components/sections/AboutIntro.astro';
+import FeedbackSection from '../components/sections/FeedbackSection.astro';
+import Footer from '../components/layout/Footer.astro';
+import ToastHost from '../components/islands/ToastHost.svelte';
+---
+
+<Layout
+	title="About — Astro Svelte"
+	description="Second route demo: Astro page + Svelte feedback form with TanStack Mutation."
+>
+	<Navbar client:load />
+	<ToastHost client:load />
+	<main>
+		<AboutIntro />
+		<FeedbackSection />
+	</main>
+	<Footer />
+</Layout>

@@ -101,6 +101,9 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 - [x] CI quality gate: Vitest and production build run in parallel
 - [x] Toast notifications via `svelte-sonner` (Sonner for Svelte)
 - [x] Engineering rules + Svelte code-quality docs for AI feature prompts
+- [x] `/about` route + feedback form (mutation + toast + Vitest TDD)
+- [x] Expanded Playwright E2E + CI Playwright job
+- [x] Vercel adapter + deploy docs
 - [ ] (Add next goals here when the owner shares them)
 
 ---
@@ -112,27 +115,33 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 ├── public/
 │   └── favicon.svg
 ├── docs/
-│   ├── Rules for Svelte code quality.md   # Component / TDD / abstraction rules
-│   └── AI feature prompt.md               # Copy-paste prompt for new features
+│   ├── Rules for Svelte code quality.md
+│   ├── AI feature prompt.md
+│   └── DEPLOY.md              # Vercel one-time + CI secrets
 ├── src/
 │   ├── components/
-│   │   ├── layout/     # Navbar, Footer
-│   │   ├── sections/   # Hero, Features, HowItWorks, LiveRepo, CallToAction
-│   │   └── islands/    # Svelte client islands (StackDemo, StartButton, ToastHost, Navbar)
-│   ├── layouts/        # Layout.astro
+│   │   ├── layout/            # Navbar, Footer
+│   │   ├── sections/          # Hero, Features, HowItWorks, LiveRepo, CallToAction, AboutIntro, FeedbackSection
+│   │   └── islands/           # StackDemo, StartButton, ToastHost, Navbar, FeedbackForm*
+│   ├── layouts/
 │   ├── lib/
-│   │   ├── api/        # Axios client + API modules + TTL cache
-│   │   ├── query/      # TanStack QueryClient + keys
-│   │   └── utils/      # helpers (useZustandStore, …)
-│   ├── pages/          # routes (index.astro)
-│   ├── stores/         # Zustand (app + http)
-│   ├── styles/         # global.css (+ Tailwind)
-│   ├── types/          # shared TypeScript types
-│   ├── middleware.ts   # Cache-Control for /_astro/* assets
+│   │   ├── api/               # Axios + GitHub + TTL cache
+│   │   ├── feedback/          # validate / handle / submit (about form)
+│   │   ├── query/
+│   │   └── utils/
+│   ├── pages/
+│   │   ├── index.astro        # /
+│   │   ├── about.astro        # /about
+│   │   └── api/
+│   │       └── feedback.ts    # POST /api/feedback
+│   ├── stores/
+│   ├── styles/
+│   ├── types/
+│   ├── middleware.ts
 │   └── env.d.ts
-├── e2e/                # Playwright E2E specs
-├── .github/workflows/  # CI: Vitest + build in parallel
-├── astro.config.mjs
+├── e2e/                       # Playwright (home + about + feedback)
+├── .github/workflows/ci.yml   # Vitest ∥ build ∥ Playwright → gate → optional Vercel
+├── astro.config.mjs           # @astrojs/vercel adapter
 ├── vitest.config.ts
 ├── playwright.config.ts
 ├── svelte.config.js
@@ -144,11 +153,12 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 
 | Package | Role |
 | ------- | ---- |
-| `astro` | Framework / SSG |
+| `astro` | Framework / hybrid (static pages + serverless) |
+| `@astrojs/vercel` | Deploy adapter (server islands + API routes) |
 | `@astrojs/svelte` + `svelte` | UI islands |
 | `tailwindcss` + `@tailwindcss/vite` | Styling |
 | `zustand` | Client state |
-| `@tanstack/svelte-query` | Client server-state / fetching |
+| `@tanstack/svelte-query` | Client server-state / fetching / mutations |
 | `axios` | HTTP client (API layer) |
 | `svelte-sonner` | Toast notifications (Sonner for Svelte; not React `sonner`) |
 | `typescript` | Types |
@@ -167,6 +177,7 @@ Roles stay split: **Axios** = HTTP, **TanStack Query** = server cache + UI flags
 | Run failed, no cache | `isError` && no `data` → failed panel + **Try again** (`refetch`) |
 | Run failed, cache exists | keep cached UI + error banner |
 | Cache freshness | `staleTime` 60s (fresh), `gcTime` 5 min, **Refresh cache** (`invalidateQueries`) |
+| Mutations (feedback) | `createMutation` + Axios `POST /api/feedback` + toast |
 | HTTP spinner / last error | Zustand `pendingRequests` / `lastError` (Axios interceptors) |
 | User feedback toasts | `svelte-sonner` (`toast.success` / `toast.error`) — not a data store |
 | Super fast | skip extra network while fresh, no refetch on tab focus, abort stale requests (`signal`) |
@@ -179,21 +190,21 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 
 | Practice | How this repo does it |
 | -------- | --------------------- |
-| Client JS | `Navbar` = `client:load` (above the fold). `StackDemo` = `client:visible`. `StartButton` = `client:idle`. |
-| Server islands | `LiveRepo` uses `server:defer` + `slot="fallback"` so the static page can cache while live stats load. Needs the Node adapter. |
+| Client JS | `Navbar` / `ToastHost` / `FeedbackForm` = `client:load`. `StackDemo` = `client:visible`. `StartButton` = `client:idle`. |
+| Server islands | `LiveRepo` uses `server:defer` + `slot="fallback"`. Needs `@astrojs/vercel` (or another server adapter). |
 | Prefetch | `prefetch: { prefetchAll: true }` — hover/focus on **internal** pages (hash links and external docs are skipped). |
 | Images | Hero uses `<Image>` from `astro:assets` (WebP, srcset, no layout shift). |
 | Route cache | `cache.provider = memoryCache()`. Always wrap with `Astro.cache.enabled` before `set()` / `invalidate()`. Dev mode is never cached. |
-| API cache | `fetchAstroRepoCached()` — 5-minute in-memory TTL (one Node process). Client cache stays in TanStack Query. |
+| API cache | `fetchAstroRepoCached()` — 5-minute in-memory TTL (one process). Client cache stays in TanStack Query. |
 | Asset cache | `Cache-Control: public, max-age=31536000, immutable` for `/_astro/*` (middleware + `public/_headers`). |
 | Errors | `Astro.logger.error()` on server-island fetch failure; Query **Try again** on the client; optional toast via `svelte-sonner`. |
-| CI | GitHub Actions runs **Vitest** and **build** in parallel. `gate` job runs only if both pass. |
+| CI | GitHub Actions: **Vitest**, **build**, and **Playwright** in parallel → **Quality gate** → optional **Deploy (Vercel)** on `main` when secrets exist. |
 
 ## 5. Engineering Rules
 
-> AI and humans must follow these when adding features. Full component checklist: [`docs/Rules for Svelte code quality.md`](docs/Rules%20for%20Svelte%20code%20quality.md). Copy-paste prompt: [`docs/AI feature prompt.md`](docs/AI%20feature%20prompt.md).
+> AI and humans must follow these when adding features. Full component checklist: [`docs/Rules for Svelte code quality.md`](docs/Rules%20for%20Svelte%20code%20quality.md). Copy-paste prompt: [`docs/AI%20feature%20prompt.md`](docs/AI%20feature%20prompt.md).
 
-1. **Stack lock:** Astro + Svelte 5 + Tailwind v4 + Zustand + TanStack Query + Axios + Vitest + Playwright + `svelte-sonner`. No React, no Jest, no React `sonner`.
+1. **Stack lock:** Astro + Svelte 5 + Tailwind v4 + Zustand + TanStack Query + Axios + Vitest + Playwright + `svelte-sonner` + `@astrojs/vercel`. No React, no Jest, no React `sonner`.
 2. **Folder lock:** Only use the structure in Section 1. New UI goes in `sections/` (static) or `islands/` (interactive). Routes only under `src/pages/`.
 3. **`.astro` vs `.svelte`:** Static / server HTML → `.astro`. Click / fetch / client state / toast triggers → `.svelte` with the right `client:*` directive.
 4. **Data roles stay separate:** Axios = HTTP; Query = server cache; Zustand = client status only (no API payloads); sonner = UX feedback only.
@@ -232,7 +243,7 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 | ------- | ------ |
 | `npm install` | Install dependencies |
 | `npm run dev` | Dev server → `localhost:4321` |
-| `npm run build` | Build to `./dist/` |
+| `npm run build` | Build to `./dist/` (Vercel output) |
 | `npm run preview` | Preview production build |
 | `npm run test` | Run Vitest (unit/component) once |
 | `npm run test:watch` | Vitest watch mode |
@@ -240,7 +251,7 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 | `npm run test:e2e:ui` | Playwright UI mode |
 | `npm run astro ...` | Astro CLI |
 
-CI (GitHub Actions): Vitest and `npm run build` run in parallel; the quality-gate job needs both.
+CI (GitHub Actions): Vitest, build, and Playwright run in parallel; the quality-gate job needs all three. Deploy steps: [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 ## 8. Docs
 
@@ -251,10 +262,12 @@ CI (GitHub Actions): Vitest and `npm run build` run in parallel; the quality-gat
 - [Astro images](https://docs.astro.build/en/guides/images/)
 - [Astro server islands](https://docs.astro.build/en/guides/server-islands/)
 - [Astro route caching](https://docs.astro.build/en/guides/caching/)
+- [Astro Vercel adapter](https://docs.astro.build/en/guides/deploy/vercel/)
 - [Svelte docs](https://svelte.dev/docs/svelte/getting-started)
 - [svelte-sonner](https://github.com/wobsoriano/svelte-sonner)
 - Repo: [`docs/Rules for Svelte code quality.md`](docs/Rules%20for%20Svelte%20code%20quality.md)
 - Repo: [`docs/AI feature prompt.md`](docs/AI%20feature%20prompt.md)
+- Repo: [`docs/DEPLOY.md`](docs/DEPLOY.md)
 
 ## 9. Troubleshooting
 

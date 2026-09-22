@@ -8,6 +8,9 @@
 	function close() {
 		open = false;
 	}
+
+	const linkClass =
+		'border-b border-line py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:border-0 min-[721px]:py-0';
 </script>
 
 <header class="sticky top-0 z-40 border-b border-line bg-mist/80 backdrop-blur-[12px]">
@@ -15,7 +18,7 @@
 		class="mx-auto flex min-h-16 w-[min(100%-2rem,72rem)] items-center justify-between gap-4"
 	>
 		<a
-			href="#top"
+			href="/"
 			class="inline-flex items-center gap-2 font-display text-[1.2rem] font-extrabold tracking-tight text-ink no-underline"
 			onclick={close}
 		>
@@ -45,36 +48,13 @@
 				: 'hidden'} min-[721px]:flex"
 			aria-label="Primary"
 		>
+			<a href="/#features" class={linkClass} onclick={close}>Features</a>
+			<a href="/#how" class={linkClass} onclick={close}>How it works</a>
+			<a href="/#live-repo" class={linkClass} onclick={close}>Live</a>
+			<a href="/#stack" class={linkClass} onclick={close}>Stack</a>
+			<a href="/about" class={linkClass} onclick={close}>About</a>
 			<a
-				href="#features"
-				class="border-b border-line py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:border-0 min-[721px]:py-0"
-				onclick={close}
-			>
-				Features
-			</a>
-			<a
-				href="#how"
-				class="border-b border-line py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:border-0 min-[721px]:py-0"
-				onclick={close}
-			>
-				How it works
-			</a>
-			<a
-				href="#live-repo"
-				class="border-b border-line py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:border-0 min-[721px]:py-0"
-				onclick={close}
-			>
-				Live
-			</a>
-			<a
-				href="#stack"
-				class="border-b border-line py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:border-0 min-[721px]:py-0"
-				onclick={close}
-			>
-				Stack
-			</a>
-			<a
-				href="#cta"
+				href="/#cta"
 				class="py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:py-0"
 				onclick={close}
 			>
