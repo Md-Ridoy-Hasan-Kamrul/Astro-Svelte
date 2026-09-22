@@ -2,7 +2,7 @@
 const features = [
 	{
 		title: 'Astro pages',
-		body: 'Ship HTML by default from .astro files layouts, slots, and zero JS until you ask for it.',
+		body: 'Ship HTML by default from .astro files — layouts, slots, and zero JS until you ask for it.',
 	},
 	{
 		title: 'Svelte islands',
@@ -15,60 +15,35 @@ const features = [
 ];
 ---
 
-<section class="section features" id="features" aria-labelledby="features-title">
-	<div class="container">
-		<p class="section__eyebrow">Features</p>
-		<h2 class="section__title" id="features-title">What this stack is for</h2>
-		<p class="section__lede">
+<section id="features" class="py-[clamp(3.5rem,8vw,6rem)]" aria-labelledby="features-title">
+	<div class="mx-auto w-[min(100%-2rem,72rem)]">
+		<p class="mb-3 font-display text-xs font-bold uppercase tracking-[0.14em] text-sea">
+			Features
+		</p>
+		<h2
+			id="features-title"
+			class="mb-3 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-tight tracking-tight text-ink"
+		>
+			What this stack is for
+		</h2>
+		<p class="m-0 max-w-xl text-lg text-ink-soft">
 			Keep most of the UI static. Hydrate only the pieces that need client-side state.
 		</p>
 
-		<ul class="features__list">
+		<ul class="mt-10 grid list-none gap-7 p-0 min-[800px]:grid-cols-3 min-[800px]:gap-8">
 			{
 				features.map((feature, index) => (
-					<li class="features__item" style={`--i: ${index}`}>
-						<h3>{feature.title}</h3>
-						<p>{feature.body}</p>
+					<li
+						class="border-t border-line pt-4 [animation:rise_650ms_ease_both]"
+						style={`animation-delay: ${index * 120 + 80}ms`}
+					>
+						<h3 class="mb-2 font-display text-[1.2rem] font-bold tracking-tight text-ink">
+							{feature.title}
+						</h3>
+						<p class="m-0 text-ink-soft">{feature.body}</p>
 					</li>
 				))
 			}
 		</ul>
 	</div>
 </section>
-
-<style>
-	.features__list {
-		list-style: none;
-		margin: 2.5rem 0 0;
-		padding: 0;
-		display: grid;
-		gap: 1.75rem;
-	}
-
-	@media (min-width: 800px) {
-		.features__list {
-			grid-template-columns: repeat(3, 1fr);
-			gap: 2rem;
-		}
-	}
-
-	.features__item {
-		padding-top: 1rem;
-		border-top: 1px solid var(--line);
-		animation: rise 650ms ease both;
-		animation-delay: calc(var(--i) * 120ms + 80ms);
-	}
-
-	.features__item h3 {
-		margin: 0 0 0.5rem;
-		font-family: var(--font-display);
-		font-size: 1.2rem;
-		font-weight: 700;
-		letter-spacing: -0.02em;
-	}
-
-	.features__item p {
-		margin: 0;
-		color: var(--ink-soft);
-	}
-</style>

@@ -2,79 +2,36 @@
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer">
-	<div class="container footer__inner">
-		<p class="footer__brand">
+<footer class="border-t border-line bg-[color-mix(in_srgb,var(--color-sea-deep)_92%,black)] py-8 pb-10 text-[#d7e4e7]">
+	<div
+		class="mx-auto grid w-[min(100%-2rem,72rem)] gap-3 min-[720px]:grid-cols-[1fr_auto_auto] min-[720px]:items-center min-[720px]:gap-6"
+	>
+		<p class="m-0 inline-flex items-center gap-2 font-display font-extrabold tracking-tight">
 			<i class="las la-layer-group" aria-hidden="true"></i>
 			Astro Svelte
 		</p>
-		<p class="footer__copy">© {year} · Built with Astro islands and Svelte</p>
-		<nav class="footer__links" aria-label="Footer">
-			<a href="https://docs.astro.build" target="_blank" rel="noopener noreferrer">
+		<p class="m-0 text-[0.95rem] text-[#d7e4e7]/75">
+			© {year} · Built with Astro islands and Svelte
+		</p>
+		<nav class="flex gap-5" aria-label="Footer">
+			<a
+				href="https://docs.astro.build"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="inline-flex items-center gap-1.5 text-[0.95rem] font-semibold text-[#d7e4e7] no-underline hover:underline"
+			>
 				<i class="las la-book" aria-hidden="true"></i>
 				Astro docs
 			</a>
-			<a href="https://svelte.dev/docs/svelte/getting-started" target="_blank" rel="noopener noreferrer">
+			<a
+				href="https://svelte.dev/docs/svelte/getting-started"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="inline-flex items-center gap-1.5 text-[0.95rem] font-semibold text-[#d7e4e7] no-underline hover:underline"
+			>
 				<i class="las la-code" aria-hidden="true"></i>
 				Svelte docs
 			</a>
 		</nav>
 	</div>
 </footer>
-
-<style>
-	.footer {
-		padding-block: 2rem 2.5rem;
-		border-top: 1px solid var(--line);
-		background: color-mix(in srgb, var(--sea-deep) 92%, black);
-		color: #d7e4e7;
-	}
-
-	.footer__inner {
-		display: grid;
-		gap: 0.75rem;
-	}
-
-	@media (min-width: 720px) {
-		.footer__inner {
-			grid-template-columns: 1fr auto auto;
-			align-items: center;
-			gap: 1.5rem;
-		}
-	}
-
-	.footer__brand {
-		margin: 0;
-		display: inline-flex;
-		align-items: center;
-		gap: 0.45rem;
-		font-family: var(--font-display);
-		font-weight: 800;
-		letter-spacing: -0.03em;
-	}
-
-	.footer__links a {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		color: #d7e4e7;
-		font-weight: 600;
-		text-decoration: none;
-		font-size: 0.95rem;
-	}
-
-	.footer__copy {
-		margin: 0;
-		font-size: 0.95rem;
-		color: rgba(215, 228, 231, 0.75);
-	}
-
-	.footer__links {
-		display: flex;
-		gap: 1.25rem;
-	}
-
-	.footer__links a:hover {
-		text-decoration: underline;
-	}
-</style>

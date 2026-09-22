@@ -5,8 +5,12 @@ const heroImage =
 	'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1800&q=80';
 ---
 
-<section class="hero" id="top" aria-labelledby="hero-brand">
-	<div class="hero__media" aria-hidden="true">
+<section
+	id="top"
+	class="relative isolate grid min-h-[min(92vh,56rem)] items-end overflow-hidden text-hero"
+	aria-labelledby="hero-brand"
+>
+	<div class="absolute inset-0 -z-10" aria-hidden="true">
 		<Image
 			src={heroImage}
 			alt=""
@@ -18,117 +22,44 @@ const heroImage =
 			quality={75}
 			loading="eager"
 			fetchpriority="high"
+			class="h-full w-full object-cover object-[center_35%] [animation:drift_8s_ease-in-out_infinite_alternate]"
 		/>
-		<div class="hero__veil"></div>
+		<div
+			class="absolute inset-0 bg-[linear-gradient(180deg,rgb(15_69_76/0.35)_0%,rgb(20_33_43/0.78)_58%,rgb(20_33_43/0.92)_100%),linear-gradient(90deg,rgb(20_33_43/0.55),transparent_55%)]"
+		>
+		</div>
 	</div>
 
-	<div class="hero__content container">
-		<p class="hero__brand" id="hero-brand">Astro Svelte</p>
-		<h1 class="hero__title">Static speed. Interactive islands.</h1>
-		<p class="hero__lede">
+	<div
+		class="mx-auto w-[min(100%-2rem,72rem)] max-w-xl py-[clamp(5rem,14vw,8rem)_clamp(3rem,8vw,5rem)] [animation:rise_700ms_ease_both]"
+	>
+		<p
+			id="hero-brand"
+			class="mb-3 font-display text-[clamp(1.75rem,5vw,2.75rem)] font-extrabold leading-none tracking-tight"
+		>
+			Astro Svelte
+		</p>
+		<h1
+			class="mb-4 font-display text-[clamp(1.35rem,3.2vw,2rem)] font-semibold leading-snug tracking-tight text-hero-soft"
+		>
+			Static speed. Interactive islands.
+		</h1>
+		<p class="mb-7 max-w-md text-[1.1rem] text-hero/85">
 			Build the page in Astro, hydrate only what needs to move with Svelte.
 		</p>
-		<div class="hero__actions">
-			<a class="btn btn--primary" href="#cta">Start building</a>
-			<a class="btn btn--ghost" href="#features">See features</a>
+		<div class="flex flex-wrap gap-3">
+			<a
+				href="#cta"
+				class="inline-flex min-h-11 items-center justify-center rounded-[0.35rem] bg-sand px-5 font-bold text-ink no-underline transition hover:-translate-y-px"
+			>
+				Start building
+			</a>
+			<a
+				href="#features"
+				class="inline-flex min-h-11 items-center justify-center rounded-[0.35rem] border border-hero/45 px-5 font-bold text-hero no-underline transition hover:-translate-y-px"
+			>
+				See features
+			</a>
 		</div>
 	</div>
 </section>
-
-<style>
-	.hero {
-		position: relative;
-		isolation: isolate;
-		min-height: min(92vh, 56rem);
-		display: grid;
-		align-items: end;
-		overflow: hidden;
-		color: #f4f8f9;
-	}
-
-	.hero__media {
-		position: absolute;
-		inset: 0;
-		z-index: -1;
-	}
-
-	.hero__media :global(img) {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: center 35%;
-		animation: drift 8s ease-in-out infinite alternate;
-	}
-
-	.hero__veil {
-		position: absolute;
-		inset: 0;
-		background:
-			linear-gradient(180deg, rgba(15, 69, 76, 0.35) 0%, rgba(20, 33, 43, 0.78) 58%, rgba(20, 33, 43, 0.92) 100%),
-			linear-gradient(90deg, rgba(20, 33, 43, 0.55), transparent 55%);
-	}
-
-	.hero__content {
-		padding-block: clamp(5rem, 14vw, 8rem) clamp(3rem, 8vw, 5rem);
-		max-width: 40rem;
-		animation: rise 700ms ease both;
-	}
-
-	.hero__brand {
-		margin: 0 0 0.85rem;
-		font-family: var(--font-display);
-		font-size: clamp(1.75rem, 5vw, 2.75rem);
-		font-weight: 800;
-		letter-spacing: -0.04em;
-		line-height: 1;
-	}
-
-	.hero__title {
-		margin: 0 0 1rem;
-		font-family: var(--font-display);
-		font-size: clamp(1.35rem, 3.2vw, 2rem);
-		font-weight: 600;
-		letter-spacing: -0.02em;
-		line-height: 1.2;
-		color: #dce9eb;
-	}
-
-	.hero__lede {
-		margin: 0 0 1.75rem;
-		max-width: 28rem;
-		font-size: 1.1rem;
-		color: rgba(244, 248, 249, 0.86);
-	}
-
-	.hero__actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75rem;
-	}
-
-	.btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 2.85rem;
-		padding: 0.65rem 1.25rem;
-		border-radius: 0.35rem;
-		font-weight: 700;
-		text-decoration: none;
-		transition: transform 160ms ease, background 160ms ease, color 160ms ease;
-	}
-
-	.btn:hover {
-		transform: translateY(-1px);
-	}
-
-	.btn--primary {
-		background: var(--sand);
-		color: var(--ink);
-	}
-
-	.btn--ghost {
-		border: 1px solid rgba(244, 248, 249, 0.45);
-		color: #f4f8f9;
-	}
-</style>

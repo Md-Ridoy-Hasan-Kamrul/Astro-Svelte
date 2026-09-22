@@ -10,179 +10,76 @@
 	}
 </script>
 
-<header class="nav">
-	<div class="nav__inner">
-		<a class="nav__brand" href="#top" onclick={close}>
-			<i class="las la-layer-group" aria-hidden="true"></i>
+<header class="sticky top-0 z-40 border-b border-line bg-mist/80 backdrop-blur-[12px]">
+	<div
+		class="mx-auto flex min-h-16 w-[min(100%-2rem,72rem)] items-center justify-between gap-4"
+	>
+		<a
+			href="#top"
+			class="inline-flex items-center gap-2 font-display text-[1.2rem] font-extrabold tracking-tight text-ink no-underline"
+			onclick={close}
+		>
+			<i class="las la-layer-group text-[1.25rem] text-sea" aria-hidden="true"></i>
 			Astro Svelte
 		</a>
 
 		<button
-			class="nav__toggle"
 			type="button"
+			class="grid size-10 place-items-center rounded-[0.4rem] border border-line bg-paper min-[721px]:hidden"
 			aria-expanded={open}
 			aria-controls="site-menu"
 			onclick={toggle}
 		>
 			<span class="sr-only">Menu</span>
-			<span class="nav__toggle-bar" class:open></span>
+			{#if open}
+				<i class="las la-times text-xl text-ink" aria-hidden="true"></i>
+			{:else}
+				<i class="las la-bars text-xl text-ink" aria-hidden="true"></i>
+			{/if}
 		</button>
 
-		<nav id="site-menu" class="nav__links" class:open aria-label="Primary">
-			<a href="#features" onclick={close}>Features</a>
-			<a href="#how" onclick={close}>How it works</a>
-			<a href="#live-repo" onclick={close}>Live</a>
-			<a href="#stack" onclick={close}>Stack</a>
-			<a href="#cta" onclick={close}>Get started</a>
+		<nav
+			id="site-menu"
+			class="absolute inset-x-0 top-full flex-col items-stretch gap-0 border-b border-line bg-paper/95 px-[clamp(1rem,4vw,2.5rem)] pb-4 pt-2 min-[721px]:static min-[721px]:flex-row min-[721px]:items-center min-[721px]:gap-6 min-[721px]:border-0 min-[721px]:bg-transparent min-[721px]:p-0 {open
+				? 'flex'
+				: 'hidden'} min-[721px]:flex"
+			aria-label="Primary"
+		>
+			<a
+				href="#features"
+				class="border-b border-line py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:border-0 min-[721px]:py-0"
+				onclick={close}
+			>
+				Features
+			</a>
+			<a
+				href="#how"
+				class="border-b border-line py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:border-0 min-[721px]:py-0"
+				onclick={close}
+			>
+				How it works
+			</a>
+			<a
+				href="#live-repo"
+				class="border-b border-line py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:border-0 min-[721px]:py-0"
+				onclick={close}
+			>
+				Live
+			</a>
+			<a
+				href="#stack"
+				class="border-b border-line py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:border-0 min-[721px]:py-0"
+				onclick={close}
+			>
+				Stack
+			</a>
+			<a
+				href="#cta"
+				class="py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:py-0"
+				onclick={close}
+			>
+				Get started
+			</a>
 		</nav>
 	</div>
 </header>
-
-<style>
-	.nav {
-		position: sticky;
-		top: 0;
-		z-index: 40;
-		backdrop-filter: blur(12px);
-		background: color-mix(in srgb, var(--mist) 82%, transparent);
-		border-bottom: 1px solid var(--line);
-	}
-
-	.nav__inner {
-		width: min(100% - (var(--space) * 2), var(--max));
-		margin-inline: auto;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		min-height: 4rem;
-	}
-
-	.nav__brand {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.45rem;
-		font-family: var(--font-display);
-		font-size: 1.2rem;
-		font-weight: 800;
-		letter-spacing: -0.03em;
-		text-decoration: none;
-		color: var(--ink);
-	}
-
-	.nav__brand i {
-		font-size: 1.25rem;
-		color: var(--sea);
-	}
-
-	.nav__links {
-		display: flex;
-		align-items: center;
-		gap: 1.5rem;
-	}
-
-	.nav__links a {
-		text-decoration: none;
-		font-weight: 600;
-		font-size: 0.95rem;
-		color: var(--ink-soft);
-		transition: color 160ms ease;
-	}
-
-	.nav__links a:hover {
-		color: var(--sea-deep);
-	}
-
-	.nav__toggle {
-		display: none;
-		width: 2.5rem;
-		height: 2.5rem;
-		border: 1px solid var(--line);
-		border-radius: 0.4rem;
-		background: var(--paper);
-		cursor: pointer;
-		place-items: center;
-	}
-
-	.nav__toggle-bar,
-	.nav__toggle-bar::before,
-	.nav__toggle-bar::after {
-		display: block;
-		width: 1.1rem;
-		height: 2px;
-		background: var(--ink);
-		position: relative;
-		transition: transform 180ms ease, opacity 180ms ease;
-	}
-
-	.nav__toggle-bar::before,
-	.nav__toggle-bar::after {
-		content: '';
-		position: absolute;
-		left: 0;
-	}
-
-	.nav__toggle-bar::before {
-		top: -6px;
-	}
-
-	.nav__toggle-bar::after {
-		top: 6px;
-	}
-
-	.nav__toggle-bar.open {
-		background: transparent;
-	}
-
-	.nav__toggle-bar.open::before {
-		top: 0;
-		transform: rotate(45deg);
-	}
-
-	.nav__toggle-bar.open::after {
-		top: 0;
-		transform: rotate(-45deg);
-	}
-
-	.sr-only {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		border: 0;
-	}
-
-	@media (max-width: 720px) {
-		.nav__toggle {
-			display: grid;
-		}
-
-		.nav__links {
-			position: absolute;
-			inset: 100% 0 auto;
-			flex-direction: column;
-			align-items: stretch;
-			gap: 0;
-			padding: 0.5rem var(--space) 1rem;
-			background: color-mix(in srgb, var(--paper) 94%, transparent);
-			border-bottom: 1px solid var(--line);
-			display: none;
-		}
-
-		.nav__links.open {
-			display: flex;
-		}
-
-		.nav__links a {
-			padding: 0.75rem 0;
-			border-bottom: 1px solid var(--line);
-		}
-
-		.nav__links a:last-child {
-			border-bottom: 0;
-		}
-	}
-</style>

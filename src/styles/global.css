@@ -12,92 +12,37 @@
 	--color-foam: #c8dde1;
 	--color-sand: #e8dcc8;
 	--color-accent: #c47a2c;
+	--color-line: rgb(20 33 43 / 0.12);
+	--color-hero: #f4f8f9;
+	--color-hero-soft: #dce9eb;
 }
 
-:root {
-	--ink: #14212b;
-	--ink-soft: #3a4a56;
-	--mist: #eef3f5;
-	--paper: #f7fafb;
-	--sea: #1a6b73;
-	--sea-deep: #0f454c;
-	--foam: #c8dde1;
-	--sand: #e8dcc8;
-	--accent: #c47a2c;
-	--line: rgba(20, 33, 43, 0.12);
-	--font-display: "Syne", system-ui, sans-serif;
-	--font-body: "Figtree", system-ui, sans-serif;
-	--space: clamp(1rem, 4vw, 2.5rem);
-	--max: 72rem;
-}
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
 
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
+	body {
+		min-height: 100%;
+		font-family: var(--font-body);
+		font-size: 1.0625rem;
+		line-height: 1.6;
+		color: var(--color-ink);
+		background:
+			radial-gradient(120% 80% at 100% 0%, rgb(26 107 115 / 0.12), transparent 55%),
+			radial-gradient(90% 60% at 0% 40%, rgb(196 122 44 / 0.08), transparent 50%),
+			linear-gradient(180deg, var(--color-mist) 0%, var(--color-paper) 40%, #e6eef1 100%);
+		background-attachment: fixed;
+	}
 
-html {
-	scroll-behavior: smooth;
-}
+	img {
+		display: block;
+		max-width: 100%;
+	}
 
-body {
-	margin: 0;
-	min-height: 100%;
-	font-family: var(--font-body);
-	font-size: 1.0625rem;
-	line-height: 1.6;
-	color: var(--ink);
-	background:
-		radial-gradient(120% 80% at 100% 0%, rgba(26, 107, 115, 0.12), transparent 55%),
-		radial-gradient(90% 60% at 0% 40%, rgba(196, 122, 44, 0.08), transparent 50%),
-		linear-gradient(180deg, var(--mist) 0%, var(--paper) 40%, #e6eef1 100%);
-	background-attachment: fixed;
-}
-
-img {
-	max-width: 100%;
-	display: block;
-}
-
-a {
-	color: inherit;
-}
-
-.container {
-	width: min(100% - (var(--space) * 2), var(--max));
-	margin-inline: auto;
-}
-
-.section {
-	padding-block: clamp(3.5rem, 8vw, 6rem);
-}
-
-.section__eyebrow {
-	margin: 0 0 0.75rem;
-	font-family: var(--font-display);
-	font-size: 0.8rem;
-	font-weight: 700;
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-	color: var(--sea);
-}
-
-.section__title {
-	margin: 0 0 0.75rem;
-	font-family: var(--font-display);
-	font-size: clamp(1.75rem, 4vw, 2.75rem);
-	font-weight: 700;
-	letter-spacing: -0.03em;
-	line-height: 1.15;
-	color: var(--ink);
-}
-
-.section__lede {
-	margin: 0;
-	max-width: 36rem;
-	color: var(--ink-soft);
-	font-size: 1.125rem;
+	a {
+		color: inherit;
+	}
 }
 
 @keyframes rise {

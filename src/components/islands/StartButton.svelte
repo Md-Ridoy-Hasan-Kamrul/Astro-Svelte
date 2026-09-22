@@ -16,31 +16,14 @@
 	}
 </script>
 
-<a class="start" class:pressed {href} target="_blank" rel="noopener noreferrer" onclick={onClick}>
+<a
+	{href}
+	target="_blank"
+	rel="noopener noreferrer"
+	class="inline-flex min-h-12 items-center justify-center rounded-[0.35rem] bg-sea px-5 font-bold text-paper no-underline transition hover:-translate-y-px hover:bg-sea-deep {pressed
+		? 'opacity-90'
+		: ''}"
+	onclick={onClick}
+>
 	{pressed ? 'Opening…' : label}
 </a>
-
-<style>
-	.start {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 3rem;
-		padding: 0.7rem 1.4rem;
-		border-radius: 0.35rem;
-		background: var(--sea);
-		color: #f4f8f9;
-		font-weight: 700;
-		text-decoration: none;
-		transition: background 160ms ease, transform 160ms ease;
-	}
-
-	.start:hover {
-		background: var(--sea-deep);
-		transform: translateY(-1px);
-	}
-
-	.start.pressed {
-		opacity: 0.9;
-	}
-</style>
