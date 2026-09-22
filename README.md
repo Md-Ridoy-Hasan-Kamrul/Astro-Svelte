@@ -78,7 +78,8 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 
 ### AI collaboration rules
 
-- **README is the memory file.** If the owner shares new goals, level updates, features, or preferences, **add/update them in this README** (this section), then implement.
+- **README is the memory file.** If the owner shares new goals, level updates, features, or preferences, **add/update them in this README** (this section + Sections 5–6 when rules change), then implement.
+- For full feature builds with Figma/TDD, use the prompt in [`docs/AI feature prompt.md`](docs/AI%20feature%20prompt.md) (reads Sections 5–6 + Svelte quality rules).
 - Explain **why** briefly when teaching; don’t dump huge unrelated refactors.
 - Match existing file style; don’t expand scope beyond what was asked.
 - Dev server: prefer `astro dev --background` (see `AGENTS.md` / `CLAUDE.md`).
@@ -99,16 +100,20 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 - [x] Route cache (`Astro.cache` + `cache.enabled`) and 5-minute API TTL cache
 - [x] CI quality gate: Vitest and production build run in parallel
 - [x] Toast notifications via `svelte-sonner` (Sonner for Svelte)
+- [x] Engineering rules + Svelte code-quality docs for AI feature prompts
 - [ ] (Add next goals here when the owner shares them)
 
 ---
 
-## Project structure
+## 1. Project structure
 
 ```text
 /
 ├── public/
 │   └── favicon.svg
+├── docs/
+│   ├── Rules for Svelte code quality.md   # Component / TDD / abstraction rules
+│   └── AI feature prompt.md               # Copy-paste prompt for new features
 ├── src/
 │   ├── components/
 │   │   ├── layout/     # Navbar, Footer
@@ -135,7 +140,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 └── package.json
 ```
 
-## Stack
+## 2. Stack
 
 | Package | Role |
 | ------- | ---- |
@@ -145,12 +150,13 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 | `zustand` | Client state |
 | `@tanstack/svelte-query` | Client server-state / fetching |
 | `axios` | HTTP client (API layer) |
+| `svelte-sonner` | Toast notifications (Sonner for Svelte; not React `sonner`) |
 | `typescript` | Types |
 | `vitest` | Unit + Astro component tests |
 | `@playwright/test` | Full-page E2E |
 | `line-awesome` | Icons8 icon font |
 
-## Data fetching (loading, error, cache, speed)
+## 3. Data fetching (loading, error, cache, speed)
 
 Roles stay split: **Axios** = HTTP, **TanStack Query** = server cache + UI flags, **Zustand** = client HTTP status (never API payloads).
 
@@ -162,11 +168,12 @@ Roles stay split: **Axios** = HTTP, **TanStack Query** = server cache + UI flags
 | Run failed, cache exists | keep cached UI + error banner |
 | Cache freshness | `staleTime` 60s (fresh), `gcTime` 5 min, **Refresh cache** (`invalidateQueries`) |
 | HTTP spinner / last error | Zustand `pendingRequests` / `lastError` (Axios interceptors) |
+| User feedback toasts | `svelte-sonner` (`toast.success` / `toast.error`) — not a data store |
 | Super fast | skip extra network while fresh, no refetch on tab focus, abort stale requests (`signal`) |
 
 Canceled Axios requests are not UI errors. 4xx is not retried; network / 5xx retries once.
 
-## Performance, caching, and CI
+## 4. Performance, caching, and CI
 
 Follow official Astro APIs — not `console.log` dumps or extra Redis for this app.
 
@@ -179,10 +186,43 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 | Route cache | `cache.provider = memoryCache()`. Always wrap with `Astro.cache.enabled` before `set()` / `invalidate()`. Dev mode is never cached. |
 | API cache | `fetchAstroRepoCached()` — 5-minute in-memory TTL (one Node process). Client cache stays in TanStack Query. |
 | Asset cache | `Cache-Control: public, max-age=31536000, immutable` for `/_astro/*` (middleware + `public/_headers`). |
-| Errors | `Astro.logger.error()` on server-island fetch failure; Query **Try again** on the client. |
+| Errors | `Astro.logger.error()` on server-island fetch failure; Query **Try again** on the client; optional toast via `svelte-sonner`. |
 | CI | GitHub Actions runs **Vitest** and **build** in parallel. `gate` job runs only if both pass. |
 
-## Commands
+## 5. Engineering Rules
+
+> AI and humans must follow these when adding features. Full component checklist: [`docs/Rules for Svelte code quality.md`](docs/Rules%20for%20Svelte%20code%20quality.md). Copy-paste prompt: [`docs/AI feature prompt.md`](docs/AI%20feature%20prompt.md).
+
+1. **Stack lock:** Astro + Svelte 5 + Tailwind v4 + Zustand + TanStack Query + Axios + Vitest + Playwright + `svelte-sonner`. No React, no Jest, no React `sonner`.
+2. **Folder lock:** Only use the structure in Section 1. New UI goes in `sections/` (static) or `islands/` (interactive). Routes only under `src/pages/`.
+3. **`.astro` vs `.svelte`:** Static / server HTML → `.astro`. Click / fetch / client state / toast triggers → `.svelte` with the right `client:*` directive.
+4. **Data roles stay separate:** Axios = HTTP; Query = server cache; Zustand = client status only (no API payloads); sonner = UX feedback only.
+5. **Isolation:** Change only files required for the requested feature. Do not drive-by refactor unrelated code.
+6. **TDD:** For new features, write Vitest tests first, then implement. Playwright only for full-page E2E in `e2e/`.
+7. **Responsive:** Desktop, ~1020px, 768px, 425px, 375px, 320px must remain usable.
+8. **Valid markup:** Every opened tag must close. Always `class="..."` with quotes for Tailwind.
+9. **Packages:** Project-local installs only; prefer `npx` for one-off CLIs.
+10. **README memory:** New owner prefs/goals → update this README (and Section 5–6 if rules change), then implement.
+
+## 6. Code Quality Standards
+
+1. **One level of abstraction per function** — orchestrate *or* do one concrete job; do not mix.
+2. **No magic numbers** — name constants (`STALE_MS`, breakpoints helpers, timeouts).
+3. **Svelte 5 runes** — `$props`, `$state`, `$derived`, `$effect` (cleanup on return). No React hooks.
+4. **Typed props & TS** in islands, stores, and `lib/`.
+5. **Tailwind** for styling; theme tokens in `src/styles/global.css` `@theme`.
+6. **Loading / error / empty / success** when fetching data (Query flags + optional toast).
+7. **Self-review required** after implementation: explicitly check abstraction levels and magic numbers; refactor before finishing.
+8. **Tests must pass** (`npm test`; E2E when the feature is page-level).
+
+### How to ask the AI for a new feature
+
+1. Open [`docs/AI feature prompt.md`](docs/AI%20feature%20prompt.md).
+2. Paste the prompt into chat.
+3. Fill `[Insert Figma Link]` and `[Insert Page/Component Name]`.
+4. The AI must read **this README Sections 5–6** + **`docs/Rules for Svelte code quality.md`** before coding.
+
+## 7. Commands
 
 | Command | Action |
 | ------- | ------ |
@@ -198,7 +238,7 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 
 CI (GitHub Actions): Vitest and `npm run build` run in parallel; the quality-gate job needs both.
 
-## Docs
+## 8. Docs
 
 - [Astro project structure](https://docs.astro.build/en/basics/project-structure/)
 - [Astro framework components](https://docs.astro.build/en/guides/framework-components/)
@@ -208,8 +248,11 @@ CI (GitHub Actions): Vitest and `npm run build` run in parallel; the quality-gat
 - [Astro server islands](https://docs.astro.build/en/guides/server-islands/)
 - [Astro route caching](https://docs.astro.build/en/guides/caching/)
 - [Svelte docs](https://svelte.dev/docs/svelte/getting-started)
+- [svelte-sonner](https://github.com/wobsoriano/svelte-sonner)
+- Repo: [`docs/Rules for Svelte code quality.md`](docs/Rules%20for%20Svelte%20code%20quality.md)
+- Repo: [`docs/AI feature prompt.md`](docs/AI%20feature%20prompt.md)
 
-## Troubleshooting
+## 9. Troubleshooting
 
 ### Git: `cannot lock ref 'HEAD'` / `refs/heads/main: reference broken`
 
