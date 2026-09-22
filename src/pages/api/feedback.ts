@@ -1,9 +1,24 @@
 import type { APIRoute } from 'astro';
 import { handleFeedbackPayload } from '../../lib/feedback/handleFeedbackPayload';
+import {
+	checkRateLimit,
+	clientKeyFromRequest,
+} from '../../lib/feedback/rateLimit';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
+	const limit = checkRateLimit(clientKeyFromRequest(request));
+	if (!limit.ok) {
+		return Response.json(
+			{ ok: false, message: 'Too many requests. Try again shortly.' },
+			{
+				status: 429,
+				headers: { 'Retry-After': String(limit.retryAfterSec) },
+			},
+		);
+	}
+
 	let raw: unknown;
 
 	try {

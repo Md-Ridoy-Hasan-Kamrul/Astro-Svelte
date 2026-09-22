@@ -31,13 +31,17 @@ test.describe('Home landing page', () => {
 });
 
 test.describe('About feedback form', () => {
-	test('shows validation errors for empty submit', async ({ page }) => {
+	test('shows validation errors for invalid input', async ({ page }) => {
 		await page.goto('/about');
-		// Wait for the Svelte island to hydrate before submitting.
-		await expect(page.getByLabel('Name')).toBeEditable();
+
+		await page.getByLabel('Name').fill('Ada');
+		await page.getByLabel('Email').fill('not-an-email');
+		await page.getByLabel('Message').fill('too short');
 		await page.getByRole('button', { name: 'Send feedback' }).click();
-		await expect(page.getByRole('alert').filter({ hasText: 'Name is required' })).toBeVisible();
-		await expect(page.getByRole('alert').filter({ hasText: 'Email is required' })).toBeVisible();
+
+		await expect(page.getByText('Enter a valid email')).toBeVisible();
+		await expect(page.getByText(/Message must be at least/)).toBeVisible();
+		await expect(page.getByText('Please fix the form')).toBeVisible();
 	});
 
 	test('submits feedback and shows a success toast', async ({ page }) => {

@@ -5,9 +5,10 @@ This app uses `@astrojs/vercel` (server islands + `POST /api/feedback`).
 ## One-time setup (recommended)
 
 1. Push this repo to GitHub.
-2. Go to [vercel.com/new](https://vercel.com/new) → **Import** the GitHub repo.
-3. Framework preset: **Astro** (auto-detected). Leave build as `npm run build`.
-4. Deploy. You get a live URL (e.g. `https://astro-svelte-….vercel.app`).
+2. In `astro.config.mjs`, set `site` to your real URL (needed for sitemap + canonical), e.g. `https://your-app.vercel.app`.
+3. Go to [vercel.com/new](https://vercel.com/new) → **Import** the GitHub repo.
+4. Framework preset: **Astro** (auto-detected). Leave build as `npm run build`.
+5. Deploy. You get a live URL.
 
 Later pushes to `main` auto-deploy.
 

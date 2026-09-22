@@ -11,9 +11,9 @@ import ToastHost from '../components/islands/ToastHost.svelte';
 	title="About — Astro Svelte"
 	description="Second route demo: Astro page + Svelte feedback form with TanStack Mutation."
 >
-	<Navbar client:load />
+	<Navbar client:media="(max-width: 720px)" />
 	<ToastHost client:load />
-	<main>
+	<main id="main">
 		<AboutIntro />
 		<FeedbackSection />
 	</main>

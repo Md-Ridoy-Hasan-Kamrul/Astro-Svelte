@@ -1,6 +1,9 @@
 ---
 import '../styles/global.css';
-import 'line-awesome/dist/line-awesome/css/line-awesome.min.css';
+import '@fontsource-variable/figtree';
+import '@fontsource/syne/600.css';
+import '@fontsource/syne/700.css';
+import '@fontsource/syne/800.css';
 
 interface Props {
 	title?: string;
@@ -11,6 +14,9 @@ const {
 	title = 'Astro Svelte',
 	description = 'Ship fast static pages with Astro and interactive islands with Svelte.',
 } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const siteName = 'Astro Svelte';
 ---
 
 <!doctype html>
@@ -21,15 +27,24 @@ const {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={siteName} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
 		<title>{title}</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap"
-			rel="stylesheet"
-		/>
 	</head>
 	<body>
+		<a
+			href="#main"
+			class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-sea focus:px-3 focus:py-2 focus:text-paper"
+		>
+			Skip to content
+		</a>
 		<slot />
 	</body>
 </html>

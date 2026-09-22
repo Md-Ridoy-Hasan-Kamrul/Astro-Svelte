@@ -1,8 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-
-const heroImage =
-	'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1800&q=80';
+import heroImage from '../../assets/hero.jpg';
 ---
 
 <section
@@ -14,15 +12,13 @@ const heroImage =
 		<Image
 			src={heroImage}
 			alt=""
-			width={1800}
-			height={1200}
 			widths={[640, 960, 1280, 1800]}
 			sizes="100vw"
 			format="webp"
 			quality={75}
 			loading="eager"
 			fetchpriority="high"
-			class="h-full w-full object-cover object-[center_35%] [animation:drift_8s_ease-in-out_infinite_alternate]"
+			class="h-full w-full object-cover object-[center_35%] motion-safe:[animation:drift_8s_ease-in-out_infinite_alternate]"
 		/>
 		<div
 			class="absolute inset-0 bg-[linear-gradient(180deg,rgb(15_69_76/0.35)_0%,rgb(20_33_43/0.78)_58%,rgb(20_33_43/0.92)_100%),linear-gradient(90deg,rgb(20_33_43/0.55),transparent_55%)]"
@@ -31,7 +27,7 @@ const heroImage =
 	</div>
 
 	<div
-		class="mx-auto w-[min(100%-2rem,72rem)] max-w-xl py-[clamp(5rem,14vw,8rem)_clamp(3rem,8vw,5rem)] [animation:rise_700ms_ease_both]"
+		class="mx-auto w-[min(100%-2rem,72rem)] max-w-xl py-[clamp(5rem,14vw,8rem)_clamp(3rem,8vw,5rem)] motion-safe:[animation:rise_700ms_ease_both]"
 	>
 		<p
 			id="hero-brand"

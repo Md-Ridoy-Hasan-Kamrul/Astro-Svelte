@@ -8,6 +8,7 @@
 	import { httpStore } from '../../stores/httpStore';
 	import { useZustandStore } from '../../lib/utils/useZustandStore.svelte';
 	import { toast } from 'svelte-sonner';
+	import Icon from '../ui/Icon.svelte';
 
 	const ui = useZustandStore(appStore);
 	const http = useZustandStore(httpStore);
@@ -72,8 +73,8 @@
 
 <div class="grid gap-6 md:grid-cols-2">
 	<div class="border border-ink/10 bg-paper/80 p-5">
-		<h3 class="mb-2 font-display text-lg font-bold text-ink">
-			<i class="las la-database" aria-hidden="true"></i>
+		<h3 class="mb-2 inline-flex items-center gap-2 font-display text-lg font-bold text-ink">
+			<Icon name="database" class="size-5" />
 			Zustand (client)
 		</h3>
 		<p class="mb-2 text-ink-soft">
@@ -98,8 +99,8 @@
 	</div>
 
 	<div class="border border-ink/10 bg-paper/80 p-5" aria-busy={repoQuery.isFetching}>
-		<h3 class="mb-2 font-display text-lg font-bold text-ink">
-			<i class="las la-cloud" aria-hidden="true"></i>
+		<h3 class="mb-2 inline-flex items-center gap-2 font-display text-lg font-bold text-ink">
+			<Icon name="cloud" class="size-5" />
 			Axios + TanStack Query
 		</h3>
 
@@ -114,14 +115,14 @@
 		</p>
 
 		{#if view === 'loading'}
-			<p class="text-ink-soft">
-				<i class="las la-circle-notch" aria-hidden="true"></i>
+			<p class="inline-flex items-center gap-2 text-ink-soft">
+				<Icon name="spinner" class="size-4 animate-spin" />
 				Loading via Axios…
 			</p>
 		{:else if view === 'error'}
 			<div class="text-accent" role="alert">
-				<p class="mb-3 font-semibold">
-					<i class="las la-exclamation-triangle" aria-hidden="true"></i>
+				<p class="mb-3 inline-flex items-center gap-2 font-semibold">
+					<Icon name="warning" class="size-5" />
 					Request failed
 				</p>
 				<p class="mb-4 text-sm">{queryError}</p>

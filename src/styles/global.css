@@ -2,7 +2,7 @@
 
 @theme {
 	--font-display: "Syne", system-ui, sans-serif;
-	--font-body: "Figtree", system-ui, sans-serif;
+	--font-body: "Figtree Variable", "Figtree", system-ui, sans-serif;
 	--color-ink: #14212b;
 	--color-ink-soft: #3a4a56;
 	--color-mist: #eef3f5;
@@ -20,6 +20,20 @@
 @layer base {
 	html {
 		scroll-behavior: smooth;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+		}
 	}
 
 	body {

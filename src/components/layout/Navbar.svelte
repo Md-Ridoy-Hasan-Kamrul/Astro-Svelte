@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Icon from '../ui/Icon.svelte';
+
 	let open = $state(false);
 
 	function toggle() {
@@ -13,7 +15,7 @@
 		'border-b border-line py-3 text-[0.95rem] font-semibold text-ink-soft no-underline transition-colors hover:text-sea-deep min-[721px]:border-0 min-[721px]:py-0';
 </script>
 
-<header class="sticky top-0 z-40 border-b border-line bg-mist/80 backdrop-blur-[12px]">
+<header class="sticky top-0 z-40 border-b border-line bg-mist/80 backdrop-blur-md">
 	<div
 		class="mx-auto flex min-h-16 w-[min(100%-2rem,72rem)] items-center justify-between gap-4"
 	>
@@ -22,7 +24,7 @@
 			class="inline-flex items-center gap-2 font-display text-[1.2rem] font-extrabold tracking-tight text-ink no-underline"
 			onclick={close}
 		>
-			<i class="las la-layer-group text-[1.25rem] text-sea" aria-hidden="true"></i>
+			<Icon name="layers" class="size-5 text-sea" />
 			Astro Svelte
 		</a>
 
@@ -35,9 +37,9 @@
 		>
 			<span class="sr-only">Menu</span>
 			{#if open}
-				<i class="las la-times text-xl text-ink" aria-hidden="true"></i>
+				<Icon name="close" class="size-5 text-ink" />
 			{:else}
-				<i class="las la-bars text-xl text-ink" aria-hidden="true"></i>
+				<Icon name="menu" class="size-5 text-ink" />
 			{/if}
 		</button>
 

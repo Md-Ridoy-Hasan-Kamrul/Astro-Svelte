@@ -45,7 +45,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
    - **TypeScript** — typed stores, libs, and `lang="ts"` in Svelte
    - **Vitest** — unit tests + Astro Container API component tests (`src/**/*.test.ts`)
    - **Playwright** — full-page E2E only (`e2e/`)
-   - **Icons8 Line Awesome** (`line-awesome`) — icon font; use `<i class="las la-home"></i>`
+   - **Inline SVG icons** (`src/components/ui/Icon.svelte`) — no icon-font CSS
 4. Do **not** put Zustand / TanStack Query in static-only Astro markup; hydrate islands first.
 5. **Axios + Zustand + TanStack roles (must keep separate):**
    - **Axios** = HTTP only (`src/lib/api/axios.ts`)
@@ -88,10 +88,10 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 ### Current goals
 
 - [x] Basic landing page (navbar, hero, sections, footer)
-- [x] Svelte islands with `client:load`
+- [x] Svelte islands with priority directives (`load` / `visible` / `idle` / `media`)
 - [x] Tailwind + Zustand + TanStack Query + TypeScript wired
 - [x] Testing setup: Vitest (unit/component) + Playwright (E2E)
-- [x] Icons8 Line Awesome icons installed
+- [x] Lean SVG icons (no icon-font CSS)
 - [x] Axios wired with Zustand + TanStack Query
 - [x] Vite-native testing mandate documented (Vitest + Playwright only)
 - [x] Production folder structure (`layout` / `sections` / `islands` / `lib/*`)
@@ -104,6 +104,8 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 - [x] `/about` route + feedback form (mutation + toast + Vitest TDD)
 - [x] Expanded Playwright E2E + CI Playwright job
 - [x] Vercel adapter + deploy docs
+- [x] Speed harden: self-hosted fonts, deferred islands, local hero LCP, HTML edge cache
+- [x] Lean production: security headers, OG/canonical, sitemap/robots, API rate limit, 404
 - [ ] (Add next goals here when the owner shares them)
 
 ---
@@ -122,11 +124,13 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 │   ├── components/
 │   │   ├── layout/            # Navbar, Footer
 │   │   ├── sections/          # Hero, Features, HowItWorks, LiveRepo, CallToAction, AboutIntro, FeedbackSection
-│   │   └── islands/           # StackDemo, StartButton, ToastHost, Navbar, FeedbackForm*
+│   │   ├── islands/           # StackDemo, StartButton, ToastHost, Navbar, FeedbackForm*
+│   │   └── ui/                # Shared Icon.svelte (inline SVG)
+│   ├── assets/                # Local images (hero.jpg → optimized WebP)
 │   ├── layouts/
 │   ├── lib/
 │   │   ├── api/               # Axios + GitHub + TTL cache
-│   │   ├── feedback/          # validate / handle / submit (about form)
+│   │   ├── feedback/          # validate / handle / submit / rateLimit
 │   │   ├── query/
 │   │   └── utils/
 │   ├── pages/
@@ -161,10 +165,11 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 | `@tanstack/svelte-query` | Client server-state / fetching / mutations |
 | `axios` | HTTP client (API layer) |
 | `svelte-sonner` | Toast notifications (Sonner for Svelte; not React `sonner`) |
+| `@fontsource-variable/figtree` + `@fontsource/syne` | Self-hosted fonts (no Google CSS round-trip) |
+| `@astrojs/sitemap` | Sitemap for SEO |
 | `typescript` | Types |
 | `vitest` | Unit + Astro component tests |
 | `@playwright/test` | Full-page E2E |
-| `line-awesome` | Icons8 icon font |
 
 ## 3. Data fetching (loading, error, cache, speed)
 
@@ -190,13 +195,17 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 
 | Practice | How this repo does it |
 | -------- | --------------------- |
-| Client JS | `Navbar` / `ToastHost` / `FeedbackForm` = `client:load`. `StackDemo` = `client:visible`. `StartButton` = `client:idle`. |
+| Client JS | `Navbar` = `client:media` (mobile only). `ToastHost` / `StartButton` = `client:idle`. `StackDemo` = `client:visible`. `FeedbackForm` = `client:load` (about page primary action). |
 | Server islands | `LiveRepo` uses `server:defer` + `slot="fallback"`. Needs `@astrojs/vercel` (or another server adapter). |
 | Prefetch | `prefetch: { prefetchAll: true }` — hover/focus on **internal** pages (hash links and external docs are skipped). |
-| Images | Hero uses `<Image>` from `astro:assets` (WebP, srcset, no layout shift). |
+| Images | Hero uses local `<Image>` (WebP, srcset, `fetchpriority=high`); motion only under `motion-safe`. |
+| Fonts | Self-hosted Figtree + Syne — no render-blocking Google Fonts. |
+| Icons | Tiny SVG `Icon.svelte` — no icon-font CSS. |
 | Route cache | `cache.provider = memoryCache()`. Always wrap with `Astro.cache.enabled` before `set()` / `invalidate()`. Dev mode is never cached. |
 | API cache | `fetchAstroRepoCached()` — 5-minute in-memory TTL (one process). Client cache stays in TanStack Query. |
-| Asset cache | `Cache-Control: public, max-age=31536000, immutable` for `/_astro/*` (middleware + `public/_headers`). |
+| Asset + HTML cache | `/_astro/*` immutable; HTML `s-maxage=60, stale-while-revalidate=300` (middleware + `_headers`). |
+| Security | `nosniff`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`; feedback API rate limit. |
+| SEO | canonical + Open Graph, `robots.txt`, `@astrojs/sitemap`, lean `404`. |
 | Errors | `Astro.logger.error()` on server-island fetch failure; Query **Try again** on the client; optional toast via `svelte-sonner`. |
 | CI | GitHub Actions: **Vitest**, **build**, and **Playwright** in parallel → **Quality gate** → optional **Deploy (Vercel)** on `main` when secrets exist. |
 
@@ -204,7 +213,7 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 
 > AI and humans must follow these when adding features. Full component checklist: [`docs/Rules for Svelte code quality.md`](docs/Rules%20for%20Svelte%20code%20quality.md). Copy-paste prompt: [`docs/AI%20feature%20prompt.md`](docs/AI%20feature%20prompt.md).
 
-1. **Stack lock:** Astro + Svelte 5 + Tailwind v4 + Zustand + TanStack Query + Axios + Vitest + Playwright + `svelte-sonner` + `@astrojs/vercel`. No React, no Jest, no React `sonner`.
+1. **Stack lock:** Astro + Svelte 5 + Tailwind v4 + Zustand + TanStack Query + Axios + Vitest + Playwright + `svelte-sonner` + `@astrojs/vercel`. No React, no Jest, no React `sonner`, no icon-font CSS.
 2. **Folder lock:** Only use the structure in Section 1. New UI goes in `sections/` (static) or `islands/` (interactive). Routes only under `src/pages/`.
 3. **`.astro` vs `.svelte`:** Static / server HTML → `.astro`. Click / fetch / client state / toast triggers → `.svelte` with the right `client:*` directive.
 4. **Data roles stay separate:** Axios = HTTP; Query = server cache; Zustand = client status only (no API payloads); sonner = UX feedback only.

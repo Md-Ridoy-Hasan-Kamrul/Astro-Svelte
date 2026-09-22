@@ -1,4 +1,6 @@
 ---
+import Icon from '../ui/Icon.svelte';
+
 const year = new Date().getFullYear();
 ---
 
@@ -7,7 +9,7 @@ const year = new Date().getFullYear();
 		class="mx-auto grid w-[min(100%-2rem,72rem)] gap-3 min-[720px]:grid-cols-[1fr_auto_auto] min-[720px]:items-center min-[720px]:gap-6"
 	>
 		<p class="m-0 inline-flex items-center gap-2 font-display font-extrabold tracking-tight">
-			<i class="las la-layer-group" aria-hidden="true"></i>
+			<Icon name="layers" class="size-5" />
 			Astro Svelte
 		</p>
 		<p class="m-0 text-[0.95rem] text-[#d7e4e7]/75">
@@ -18,7 +20,7 @@ const year = new Date().getFullYear();
 				href="/about"
 				class="inline-flex items-center gap-1.5 text-[0.95rem] font-semibold text-[#d7e4e7] no-underline hover:underline"
 			>
-				<i class="las la-info-circle" aria-hidden="true"></i>
+				<Icon name="info" class="size-4" />
 				About
 			</a>
 			<a
@@ -27,7 +29,7 @@ const year = new Date().getFullYear();
 				rel="noopener noreferrer"
 				class="inline-flex items-center gap-1.5 text-[0.95rem] font-semibold text-[#d7e4e7] no-underline hover:underline"
 			>
-				<i class="las la-book" aria-hidden="true"></i>
+				<Icon name="book" class="size-4" />
 				Astro docs
 			</a>
 			<a
@@ -36,7 +38,7 @@ const year = new Date().getFullYear();
 				rel="noopener noreferrer"
 				class="inline-flex items-center gap-1.5 text-[0.95rem] font-semibold text-[#d7e4e7] no-underline hover:underline"
 			>
-				<i class="las la-code" aria-hidden="true"></i>
+				<Icon name="code" class="size-4" />
 				Svelte docs
 			</a>
 		</nav>

@@ -2,6 +2,7 @@
 import { fetchAstroRepoCached } from '../../lib/api/github';
 import { getAxiosErrorMessage } from '../../lib/api/axios';
 import type { RepoInfo } from '../../lib/api/github';
+import Icon from '../ui/Icon.svelte';
 
 let repo: RepoInfo | null = null;
 let error: string | null = null;
@@ -36,9 +37,9 @@ try {
 		</h2>
 		{
 			error ? (
-				<p class="m-0 text-accent" role="alert">
-					<i class="las la-exclamation-triangle" aria-hidden="true" />
-					Could not load live stats. {error}
+				<p class="m-0 inline-flex items-start gap-2 text-accent" role="alert">
+					<Icon name="warning" class="mt-0.5 size-5 shrink-0" />
+					<span>Could not load live stats. {error}</span>
 				</p>
 			) : repo ? (
 				<p class="m-0 max-w-xl text-lg text-ink-soft">

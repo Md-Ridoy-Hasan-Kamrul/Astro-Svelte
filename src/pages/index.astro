@@ -12,9 +12,9 @@ import ToastHost from '../components/islands/ToastHost.svelte';
 ---
 
 <Layout title="Astro Svelte — Landing">
-	<Navbar client:load />
-	<ToastHost client:load />
-	<main>
+	<Navbar client:media="(max-width: 720px)" />
+	<ToastHost client:idle />
+	<main id="main">
 		<Hero />
 		<Features />
 		<HowItWorks />

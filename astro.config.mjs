@@ -1,13 +1,15 @@
 // @ts-check
 import vercel from '@astrojs/vercel';
+import sitemap from '@astrojs/sitemap';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, memoryCache } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://astro-svelte.example.com',
 	adapter: vercel(),
-	integrations: [svelte()],
+	integrations: [svelte(), sitemap()],
 	prefetch: {
 		prefetchAll: true,
 		defaultStrategy: 'hover',
