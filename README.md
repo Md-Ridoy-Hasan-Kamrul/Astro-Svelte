@@ -98,6 +98,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 - [x] Performance: client directives by priority, prefetch, `<Image>`, server island fallback
 - [x] Route cache (`Astro.cache` + `cache.enabled`) and 5-minute API TTL cache
 - [x] CI quality gate: Vitest and production build run in parallel
+- [x] Toast notifications via `svelte-sonner` (Sonner for Svelte)
 - [ ] (Add next goals here when the owner shares them)
 
 ---
@@ -112,7 +113,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 │   ├── components/
 │   │   ├── layout/     # Navbar, Footer
 │   │   ├── sections/   # Hero, Features, HowItWorks, LiveRepo, CallToAction
-│   │   └── islands/    # Svelte client islands (StackDemo, StartButton, Navbar)
+│   │   └── islands/    # Svelte client islands (StackDemo, StartButton, ToastHost, Navbar)
 │   ├── layouts/        # Layout.astro
 │   ├── lib/
 │   │   ├── api/        # Axios client + API modules + TTL cache

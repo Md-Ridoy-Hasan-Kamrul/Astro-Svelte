@@ -7,6 +7,7 @@
 	import { appStore } from '../../stores/appStore';
 	import { httpStore } from '../../stores/httpStore';
 	import { useZustandStore } from '../../lib/utils/useZustandStore.svelte';
+	import { toast } from 'svelte-sonner';
 
 	const ui = useZustandStore(appStore);
 	const http = useZustandStore(httpStore);
@@ -38,15 +39,34 @@
 	);
 	const hasCachedData = $derived(repoQuery.data != null);
 
+	function countVisit() {
+		ui.state.incrementVisits();
+		toast.success('Visit counted', {
+			description: `Total visits: ${appStore.getState().visits}`,
+		});
+	}
+
 	function retryFetch() {
 		ui.state.setLastAction('retried github fetch');
 		http.state.setLastError(null);
-		void repoQuery.refetch();
+		toast.message('Retrying GitHub fetch…');
+		void repoQuery.refetch().then((result) => {
+			if (result.error) {
+				toast.error('Retry failed', {
+					description: getAxiosErrorMessage(result.error),
+				});
+				return;
+			}
+			toast.success('GitHub data refreshed');
+		});
 	}
 
 	function refreshCache() {
 		ui.state.setLastAction('cache invalidated');
-		void queryClient.invalidateQueries({ queryKey: queryKeys.astroRepo });
+		toast.message('Refreshing cache…');
+		void queryClient.invalidateQueries({ queryKey: queryKeys.astroRepo }).then(() => {
+			toast.success('Cache refreshed');
+		});
 	}
 </script>
 
@@ -71,7 +91,7 @@
 		<button
 			type="button"
 			class="min-h-11 bg-sea px-4 font-bold text-paper transition hover:-translate-y-px hover:bg-sea-deep"
-			onclick={() => ui.state.incrementVisits()}
+			onclick={countVisit}
 		>
 			Count visit
 		</button>
