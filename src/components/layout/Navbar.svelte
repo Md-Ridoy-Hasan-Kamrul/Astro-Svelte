@@ -40,7 +40,8 @@
 	}
 
 	function surfaceForPath(pathname: string): 'dark' | 'light' {
-		return normalizePath(pathname) === '/' ? 'dark' : 'light';
+		const normalized = normalizePath(pathname);
+		return normalized === '/' || normalized === '/login' ? 'dark' : 'light';
 	}
 
 	function syncFromLocation() {
@@ -239,7 +240,7 @@
 					{/each}
 				</nav>
 
-				<LiquidGlassButton href="/#stack" label="Get started" size="sm" />
+				<LiquidGlassButton href="/login" label="Get started" size="sm" />
 			</div>
 		</div>
 	</div>
@@ -413,7 +414,7 @@
 						</div>
 					</div>
 					<LiquidGlassButton
-						href="/#stack"
+						href="/login"
 						label="Get started"
 						surface={isDark ? 'dark' : 'light'}
 						onclick={close}

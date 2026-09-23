@@ -1,0 +1,16 @@
+---
+/**
+ * Login section — Framer NeuroField on pure black (demo match).
+ * https://framer.com/m/NeuroField-VOsoq7.js@CwCJKv0L7J7qifRS563C
+ */
+import LoginForm from '../islands/LoginForm.svelte';
+---
+
+<section
+	id="login"
+	class="relative grid min-h-[calc(100svh-5rem)] place-items-center overflow-hidden bg-black px-4 py-16 text-white"
+	aria-labelledby="login-title"
+>
+	<h1 id="login-title" class="sr-only">Sign in</h1>
+	<LoginForm client:load />
+</section>
