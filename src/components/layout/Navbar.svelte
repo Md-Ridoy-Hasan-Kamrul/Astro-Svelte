@@ -69,8 +69,8 @@
 
 <header
 	class={isDark
-		? 'fixed inset-x-0 top-0 z-40'
-		: 'sticky top-0 z-40'}
+		? 'fixed inset-x-0 top-0 z-40 w-full max-w-[100vw] overflow-x-clip'
+		: 'sticky top-0 z-40 w-full max-w-[100vw] overflow-x-clip'}
 >
 	<!-- Desktop: Liquid Glass (unchanged above 1020px) -->
 	<div class="hidden px-[clamp(0.75rem,3vw,1.25rem)] pb-2 pt-3 min-[1021px]:block">
@@ -108,11 +108,11 @@
 	<!-- ≤1020px: Fullscreen Navbars — dark on hero, light elsewhere -->
 	<div class="min-[1021px]:hidden">
 		<div
-			class="flex h-16 items-center justify-between gap-3 px-[clamp(0.5rem,3vw,1.75rem)] min-[768px]:h-20"
+			class="flex h-16 items-center justify-between gap-2 px-[clamp(0.5rem,3vw,1.75rem)] min-[375px]:gap-3 min-[768px]:h-20"
 		>
-			<a href="/" class="inline-flex items-center gap-1 no-underline" onclick={close}>
+			<a href="/" class="inline-flex min-w-0 items-center gap-1 no-underline" onclick={close}>
 				<span
-					class="font-display text-2xl font-normal italic leading-none tracking-tight"
+					class="truncate font-display text-xl font-normal italic leading-none tracking-tight min-[375px]:text-2xl"
 					style="color: {isDark ? cream : ink}"
 				>
 					Astro Svelte
@@ -121,7 +121,7 @@
 
 			<button
 				type="button"
-				class="inline-flex w-32 cursor-pointer items-center justify-center gap-3 rounded-full border px-5 py-2.5 transition hover:scale-110"
+				class="inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border px-3 py-2.5 transition hover:scale-110 min-[375px]:w-32 min-[375px]:gap-3 min-[375px]:px-5"
 				style="border-color: {isDark
 					? 'rgba(245, 243, 238, 0.25)'
 					: 'rgba(10, 10, 10, 0.3)'}; color: {isDark ? cream : ink}"
@@ -130,7 +130,10 @@
 				aria-label={open ? 'Close' : 'Menu'}
 				onclick={toggle}
 			>
-				<span class="relative h-3.5 w-12.5 overflow-hidden text-[0.8125rem] font-medium uppercase tracking-[0.14em]" aria-hidden="true">
+				<span
+					class="relative hidden h-3.5 w-12.5 overflow-hidden text-[0.8125rem] font-medium uppercase tracking-[0.14em] min-[375px]:block"
+					aria-hidden="true"
+				>
 					<span
 						class="absolute left-0 top-0 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] {open
 							? '-translate-y-2.5 opacity-0'

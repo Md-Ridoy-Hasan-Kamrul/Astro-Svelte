@@ -5,7 +5,7 @@ import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 
 <section
 	id="top"
-	class="relative isolate grid h-screen items-end overflow-hidden text-hero"
+	class="relative isolate grid h-svh min-h-[28rem] items-end overflow-hidden text-hero"
 	aria-labelledby="hero-brand"
 >
 	<!-- Infinite Image Tunnel (Framer port) — keeps glass CTAs below -->
@@ -36,7 +36,7 @@ import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 		>
 			Static <span class="text-blue-300">speed</span>. Interactive <span class="text-blue-300">islands</span>.
 		</h1>
-		<p class="mb-7 max-w-md text-[1.1rem] text-hero/85">
+		<p class="mb-7 max-w-md text-[clamp(1rem,2.8vw,1.1rem)] text-hero/85">
 			Build the page in Astro, hydrate only what needs to move with Svelte.
 		</p>
 		<div class="flex flex-wrap gap-3">

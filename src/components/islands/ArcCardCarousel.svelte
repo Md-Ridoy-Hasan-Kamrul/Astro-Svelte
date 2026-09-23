@@ -239,7 +239,7 @@
 
 <div
 	bind:this={containerEl}
-	class="relative min-h-[28rem] w-full min-w-[20rem] overflow-hidden touch-pan-y {className}"
+	class="relative min-h-112ull min-w-[20rem] overflow-hidden touch-pan-y {className}"
 	style="height: 100%; background: {background}; perspective: 1400px;"
 	role="region"
 	aria-roledescription="carousel"
@@ -301,7 +301,7 @@
 
 {#snippet cardBody(item: ArcCard, i: number)}
 	<div
-		class="overflow-hidden rounded-[4px] bg-[#eee] shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
+		class="overflow-hidden rounded-sm bg-[#eee] shadow-[0_20px_40px_rgba(0,0,0,0.12)]"
 		style="height: {cardHeight - 34}px;"
 	>
 		<img

@@ -106,6 +106,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 - [x] Vercel adapter + deploy docs
 - [x] Speed harden: self-hosted fonts, deferred islands, local hero LCP, HTML edge cache
 - [x] Lean production: security headers, OG/canonical, sitemap/robots, API rate limit, 404
+- [x] Landing responsive pass (320–desktop) + Stack book island split
 - [ ] (Add next goals here when the owner shares them)
 
 ---
@@ -123,8 +124,8 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 ├── src/
 │   ├── components/
 │   │   ├── layout/            # Navbar, Footer
-│   │   ├── sections/          # Hero, Features, HowItWorks, LiveRepo, CallToAction, AboutIntro, FeedbackSection
-│   │   ├── islands/           # StackDemo, StartButton, ToastHost, Navbar, FeedbackForm*
+│   │   ├── sections/          # Hero, Features, HowItWorks, Stack, AboutIntro, FeedbackSection
+│   │   ├── islands/           # InteractiveBook, ToastHost, Navbar, FeedbackForm, carousels…
 │   │   └── ui/                # Icon.svelte, LiquidGlassButton.svelte
 │   ├── assets/                # Local images (hero.jpg → optimized WebP)
 │   ├── layouts/
@@ -195,7 +196,7 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 
 | Practice           | How this repo does it                                                                                                                                                             |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Client JS          | `Navbar` = `client:media` (mobile only). `ToastHost` / `StartButton` = `client:idle`. `StackDemo` = `client:visible`. `FeedbackForm` = `client:load` (about page primary action). |
+| Client JS          | `Navbar` = `client:media` (mobile only). `ToastHost` = `client:idle`. `InteractiveBook` (Stack) / carousel / path = `client:visible` or `client:media`. `FeedbackForm` = `client:load` (about page primary action). |
 | Server islands     | `LiveRepo` uses `server:defer` + `slot="fallback"`. Needs `@astrojs/vercel` (or another server adapter).                                                                          |
 | Prefetch           | `prefetch: { prefetchAll: true }` — hover/focus on **internal** pages (hash links and external docs are skipped).                                                                 |
 | Images             | Hero uses local `<Image>` (WebP, srcset, `fetchpriority=high`); motion only under `motion-safe`.                                                                                  |

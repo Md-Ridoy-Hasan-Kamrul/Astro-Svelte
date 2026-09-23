@@ -29,7 +29,7 @@ When this file is mentioned with `README.md`, follow both. Prefer this file for 
 7. **Business logic out of markup** — Axios in `lib/api`, Query keys/client in `lib/query`, UI status in `stores/`, toast calls from event handlers or small helpers.
 8. **Tailwind** — utility classes on elements; always `class="..."` with quotes. Theme tokens live in `src/styles/global.css` (`@theme`).
 9. **Client directives** — `client:load` above the fold; `client:visible` / `client:idle` below. Never hydrate static-only Astro.
-10. **Toasts** — `import { toast } from 'svelte-sonner'`; `<Toaster />` only via `ToastHost` (`client:load`).
+10. **Toasts** — `import { toast } from 'svelte-sonner'`; `<Toaster />` only via `ToastHost` (`client:idle` on landing; `client:load` when toasts are primary UX).
 
 ---
 
