@@ -12,6 +12,7 @@ import { ClientRouter } from 'astro:transitions';
 import AuthGate from '../components/islands/dashboard/AuthGate.svelte';
 import DashboardChrome from '../components/islands/dashboard/DashboardChrome.svelte';
 import ToastHost from '../components/islands/ToastHost.svelte';
+import SmoothScroll from '../components/islands/SmoothScroll.svelte';
 
 interface Props {
 	title?: string;
@@ -72,6 +73,7 @@ const { title = 'Crextio Dashboard' } = Astro.props;
 		</style>
 	</head>
 	<body class="crextio overflow-x-clip">
+		<SmoothScroll client:load transition:persist="cx-lenis" />
 		<AuthGate client:load transition:persist="cx-auth" />
 		<ToastHost client:idle transition:persist="cx-toast" />
 		<div class="mx-auto w-[min(100%-1rem,78rem)] py-3 min-[375px]:w-[min(100%-1.25rem,78rem)] min-[375px]:py-4 md:py-6">

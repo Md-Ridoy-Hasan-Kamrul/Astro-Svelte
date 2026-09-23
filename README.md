@@ -113,6 +113,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 - [x] Landing responsive pass (320–desktop) + Stack book island split
 - [x] Shared NeuroField-style site cursors (`public/cursors/` + README rule)
 - [x] Crextio admin dashboard (`/dashboard`) + one-click admin login
+- [x] Lenis site-wide smooth scroll (persists as the app grows)
 - [ ] (Add next goals here when the owner shares them)
 
 ---
