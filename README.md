@@ -75,6 +75,8 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
    - Prefer **`npx`** for one-off CLIs when available (e.g. `npx astro add …`, `npx playwright …`, `npx vitest …`) instead of global binaries.
    - Scripts in `package.json` (`npm run …`) already use local binaries — prefer those in daily work.
    - Keep the project portable: another machine should work after `npm install` only.
+10. **Handle loading, error, and empty states cleanly** (Query / mutation flags + inline UI; toast only for user-facing feedback).
+11. **Debug frontend issues and optimize for performance and usability** (islands by priority, usable 320→desktop, fix broken UX before expanding scope).
 
 ### AI collaboration rules
 

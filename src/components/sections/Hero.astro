@@ -5,10 +5,10 @@ import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 
 <section
 	id="top"
-	class="relative isolate grid h-svh min-h-[28rem] items-end overflow-hidden text-hero"
+	class="relative isolate grid h-svh min-h-[28rem] place-items-center overflow-hidden text-hero"
 	aria-labelledby="hero-brand"
 >
-	<!-- Infinite Image Tunnel (Framer port) — keeps glass CTAs below -->
+	<!-- Infinite Image Tunnel (Framer port) -->
 	<div class="absolute inset-0 -z-10" aria-hidden="true">
 		<InfiniteImageTunnel
 			client:load
@@ -17,13 +17,13 @@ import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 			animationSpeed={1}
 		/>
 		<div
-			class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(10_15_18/0.25)_0%,rgb(20_33_43/0.55)_45%,rgb(20_33_43/0.88)_100%),linear-gradient(90deg,rgb(20_33_43/0.45),transparent_58%)]"
+			class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgb(10_15_18/0.15)_0%,rgb(20_33_43/0.55)_55%,rgb(10_15_18/0.82)_100%),linear-gradient(180deg,rgb(10_15_18/0.35)_0%,transparent_40%,rgb(10_15_18/0.45)_100%)]"
 		>
 		</div>
 	</div>
 
 	<div
-		class="relative z-10 mx-auto w-[min(100%-2rem,72rem)] max-w-xl py-[clamp(5rem,14vw,8rem)_clamp(3rem,8vw,5rem)] motion-safe:[animation:rise_700ms_ease_both]"
+		class="relative z-10 mx-auto flex w-[min(100%-2rem,40rem)] flex-col items-center px-4 py-8 text-center motion-safe:[animation:rise_700ms_ease_both]"
 	>
 		<p
 			id="hero-brand"
@@ -39,7 +39,7 @@ import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 		<p class="mb-7 max-w-md text-[clamp(1rem,2.8vw,1.1rem)] text-hero/85">
 			Build the page in Astro, hydrate only what needs to move with Svelte.
 		</p>
-		<div class="flex flex-wrap gap-3">
+		<div class="flex flex-wrap justify-center gap-3">
 			<LiquidGlassButton href="#stack" label="Start building" surface="light" />
 			<LiquidGlassButton href="#features" label="See features" surface="dark" />
 		</div>
