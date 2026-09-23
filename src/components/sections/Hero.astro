@@ -1,6 +1,5 @@
 ---
-import { Image } from 'astro:assets';
-import heroImage from '../../assets/hero.jpg';
+import InfiniteImageTunnel from '../islands/InfiniteImageTunnel.svelte';
 import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 ---
 
@@ -9,26 +8,22 @@ import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 	class="relative isolate grid min-h-[min(92vh,56rem)] items-end overflow-hidden text-hero"
 	aria-labelledby="hero-brand"
 >
+	<!-- Infinite Image Tunnel (Framer port) — keeps glass CTAs below -->
 	<div class="absolute inset-0 -z-10" aria-hidden="true">
-		<Image
-			src={heroImage}
-			alt=""
-			widths={[640, 960, 1280, 1800]}
-			sizes="100vw"
-			format="webp"
-			quality={75}
-			loading="eager"
-			fetchpriority="high"
-			class="h-full w-full object-cover object-[center_35%] motion-safe:[animation:drift_8s_ease-in-out_infinite_alternate]"
+		<InfiniteImageTunnel
+			client:load
+			class="h-full min-h-[min(92vh,56rem)]"
+			backgroundColor="#0a0f12"
+			animationSpeed={1}
 		/>
 		<div
-			class="absolute inset-0 bg-[linear-gradient(180deg,rgb(15_69_76/0.35)_0%,rgb(20_33_43/0.78)_58%,rgb(20_33_43/0.92)_100%),linear-gradient(90deg,rgb(20_33_43/0.55),transparent_55%)]"
+			class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(10_15_18/0.25)_0%,rgb(20_33_43/0.55)_45%,rgb(20_33_43/0.88)_100%),linear-gradient(90deg,rgb(20_33_43/0.45),transparent_58%)]"
 		>
 		</div>
 	</div>
 
 	<div
-		class="mx-auto w-[min(100%-2rem,72rem)] max-w-xl py-[clamp(5rem,14vw,8rem)_clamp(3rem,8vw,5rem)] motion-safe:[animation:rise_700ms_ease_both]"
+		class="relative z-10 mx-auto w-[min(100%-2rem,72rem)] max-w-xl py-[clamp(5rem,14vw,8rem)_clamp(3rem,8vw,5rem)] motion-safe:[animation:rise_700ms_ease_both]"
 	>
 		<p
 			id="hero-brand"
