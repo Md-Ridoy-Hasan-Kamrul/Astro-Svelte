@@ -29,13 +29,19 @@ const steps = [
 	},
 	{
 		label: '03',
+		title: 'Add a directive',
+		body: 'Tag islands with client:load, client:visible, or client:idle so Astro knows when to hydrate.',
+		point: FRAMER_POINTS[2],
+	},
+	{
+		label: '04',
 		title: 'Hydrate on demand',
-		body: 'Add client:load for above-the-fold UI. Use client:visible or client:idle for islands lower on the page.',
+		body: 'Above-the-fold UI can load immediately. Lower islands wait for visible or idle.',
 		point: FRAMER_POINTS[3],
 	},
 ];
 
-/** Dots only at the three step nodes (path still follows full Framer curve). */
+/** One Framer path node per step (fills all four curve anchors). */
 const stepPoints = steps.map((step) => step.point);
 
 const aspect = `${FRAMER_VIEW_WIDTH} / ${FRAMER_VIEW_HEIGHT}`;
