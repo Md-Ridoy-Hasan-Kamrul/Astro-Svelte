@@ -10,6 +10,7 @@
 	} from '../../lib/feedback/validateFeedback';
 	import { submitFeedback } from '../../lib/feedback/submitFeedback';
 	import { getAxiosErrorMessage } from '../../lib/api/axios';
+	import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 
 	let name = $state('');
 	let email = $state('');
@@ -121,11 +122,10 @@
 		{/if}
 	</div>
 
-	<button
+	<LiquidGlassButton
 		type="submit"
-		class="min-h-11 justify-self-start bg-sea px-5 font-bold text-paper transition hover:-translate-y-px hover:bg-sea-deep disabled:cursor-not-allowed disabled:opacity-60"
+		label={feedbackMutation.isPending ? 'Sending…' : 'Send feedback'}
 		disabled={feedbackMutation.isPending}
-	>
-		{feedbackMutation.isPending ? 'Sending…' : 'Send feedback'}
-	</button>
+		class="justify-self-start"
+	/>
 </form>

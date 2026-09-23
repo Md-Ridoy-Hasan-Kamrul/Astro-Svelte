@@ -9,6 +9,7 @@
 	import { useZustandStore } from '../../lib/utils/useZustandStore.svelte';
 	import { toast } from 'svelte-sonner';
 	import Icon from '../ui/Icon.svelte';
+	import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 
 	const ui = useZustandStore(appStore);
 	const http = useZustandStore(httpStore);
@@ -89,13 +90,7 @@
 				<span class="text-accent">Error: {http.state.lastError}</span>
 			{/if}
 		</p>
-		<button
-			type="button"
-			class="min-h-11 bg-sea px-4 font-bold text-paper transition hover:-translate-y-px hover:bg-sea-deep"
-			onclick={countVisit}
-		>
-			Count visit
-		</button>
+		<LiquidGlassButton label="Count visit" onclick={countVisit} />
 	</div>
 
 	<div class="border border-ink/10 bg-paper/80 p-5" aria-busy={repoQuery.isFetching}>
@@ -126,13 +121,7 @@
 					Request failed
 				</p>
 				<p class="mb-4 text-sm">{queryError}</p>
-				<button
-					type="button"
-					class="min-h-11 bg-accent px-4 font-bold text-paper transition hover:-translate-y-px"
-					onclick={retryFetch}
-				>
-					Try again
-				</button>
+				<LiquidGlassButton label="Try again" onclick={retryFetch} />
 			</div>
 		{:else}
 			{#if repoQuery.isError && hasCachedData}
@@ -140,13 +129,7 @@
 					<p class="mb-2">
 						Refresh failed — showing cached data. {queryError}
 					</p>
-					<button
-						type="button"
-						class="min-h-10 bg-accent px-3 font-bold text-paper"
-						onclick={retryFetch}
-					>
-						Try again
-					</button>
+					<LiquidGlassButton label="Try again" size="sm" onclick={retryFetch} />
 				</div>
 			{/if}
 
@@ -169,14 +152,11 @@
 					>
 						View on GitHub
 					</a>
-					<button
-						type="button"
-						class="min-h-11 border border-ink/15 bg-mist px-4 font-bold text-ink transition hover:-translate-y-px"
+					<LiquidGlassButton
+						label="Refresh cache"
 						onclick={refreshCache}
 						disabled={repoQuery.isFetching}
-					>
-						Refresh cache
-					</button>
+					/>
 				</div>
 			{/if}
 		{/if}

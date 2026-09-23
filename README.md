@@ -125,7 +125,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 │   │   ├── layout/            # Navbar, Footer
 │   │   ├── sections/          # Hero, Features, HowItWorks, LiveRepo, CallToAction, AboutIntro, FeedbackSection
 │   │   ├── islands/           # StackDemo, StartButton, ToastHost, Navbar, FeedbackForm*
-│   │   └── ui/                # Shared Icon.svelte (inline SVG)
+│   │   └── ui/                # Icon.svelte, LiquidGlassButton.svelte
 │   ├── assets/                # Local images (hero.jpg → optimized WebP)
 │   ├── layouts/
 │   ├── lib/

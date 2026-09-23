@@ -31,28 +31,33 @@ test.describe('Home landing page', () => {
 });
 
 test.describe('About feedback form', () => {
+	test.describe.configure({ mode: 'serial' });
+
 	test('shows validation errors for invalid input', async ({ page }) => {
 		await page.goto('/about');
 
-		await page.getByLabel('Name').fill('Ada');
-		await page.getByLabel('Email').fill('not-an-email');
-		await page.getByLabel('Message').fill('too short');
-		await page.getByRole('button', { name: 'Send feedback' }).click();
+		const form = page.locator('#feedback form');
+		await expect(form.getByRole('button', { name: 'Send feedback' })).toBeVisible();
+		await form.getByLabel('Name').fill('Ada');
+		await form.locator('#feedback-email').fill('foo@bar');
+		await form.getByLabel('Message').fill('too short');
+		await form.getByRole('button', { name: 'Send feedback' }).click();
 
-		await expect(page.getByText('Enter a valid email')).toBeVisible();
-		await expect(page.getByText(/Message must be at least/)).toBeVisible();
 		await expect(page.getByText('Please fix the form')).toBeVisible();
+		await expect(form.getByText('Enter a valid email')).toBeVisible();
+		await expect(form.getByText(/Message must be at least/)).toBeVisible();
 	});
 
 	test('submits feedback and shows a success toast', async ({ page }) => {
 		await page.goto('/about');
 
-		await page.getByLabel('Name').fill('Ada Lovelace');
-		await page.getByLabel('Email').fill('ada@example.com');
-		await page.getByLabel('Message').fill('Routing plus mutation toast feels solid for learning.');
-		await page.getByRole('button', { name: 'Send feedback' }).click();
+		const form = page.locator('#feedback form');
+		await form.getByLabel('Name').fill('Ada Lovelace');
+		await form.locator('#feedback-email').fill('ada@example.com');
+		await form.getByLabel('Message').fill('Routing plus mutation toast feels solid for learning.');
+		await form.getByRole('button', { name: 'Send feedback' }).click();
 
 		await expect(page.getByText('Feedback sent')).toBeVisible();
-		await expect(page.getByLabel('Name')).toHaveValue('');
+		await expect(form.getByLabel('Name')).toHaveValue('');
 	});
 });

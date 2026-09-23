@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/layout/Navbar.svelte';
 import Footer from '../components/layout/Footer.astro';
+import LiquidGlassButton from '../components/ui/LiquidGlassButton.svelte';
 ---
 
 <Layout title="Page not found — Astro Svelte" description="This page does not exist.">
@@ -15,18 +16,8 @@ import Footer from '../components/layout/Footer.astro';
 			That route is not in this project. Head home or open About.
 		</p>
 		<div class="flex flex-wrap gap-3">
-			<a
-				href="/"
-				class="inline-flex min-h-11 items-center rounded-[0.35rem] bg-sea px-5 font-bold text-paper no-underline"
-			>
-				Home
-			</a>
-			<a
-				href="/about"
-				class="inline-flex min-h-11 items-center rounded-[0.35rem] border border-line px-5 font-bold text-ink no-underline"
-			>
-				About
-			</a>
+			<LiquidGlassButton href="/" label="Home" />
+			<LiquidGlassButton href="/about" label="About" surface="dark" />
 		</div>
 	</main>
 	<Footer />

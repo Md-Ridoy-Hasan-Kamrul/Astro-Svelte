@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import heroImage from '../../assets/hero.jpg';
+import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 ---
 
 <section
@@ -44,18 +45,8 @@ import heroImage from '../../assets/hero.jpg';
 			Build the page in Astro, hydrate only what needs to move with Svelte.
 		</p>
 		<div class="flex flex-wrap gap-3">
-			<a
-				href="#cta"
-				class="inline-flex min-h-11 items-center justify-center rounded-[0.35rem] bg-sand px-5 font-bold text-ink no-underline transition hover:-translate-y-px"
-			>
-				Start building
-			</a>
-			<a
-				href="#features"
-				class="inline-flex min-h-11 items-center justify-center rounded-[0.35rem] border border-hero/45 px-5 font-bold text-hero no-underline transition hover:-translate-y-px"
-			>
-				See features
-			</a>
+			<LiquidGlassButton href="#cta" label="Start building" surface="light" />
+			<LiquidGlassButton href="#features" label="See features" surface="dark" />
 		</div>
 	</div>
 </section>
