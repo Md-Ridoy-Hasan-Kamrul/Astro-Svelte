@@ -11,6 +11,7 @@
 	 */
 	import { onDestroy, onMount } from 'svelte';
 	import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
+	import { pauseSmoothScroll, resumeSmoothScroll } from '../../lib/smoothScroll';
 
 	let {
 		surface = 'light',
@@ -63,6 +64,8 @@
 	$effect(() => {
 		if (typeof document === 'undefined') return;
 		document.body.style.overflow = open ? 'hidden' : '';
+		if (open) pauseSmoothScroll();
+		else resumeSmoothScroll();
 	});
 
 	$effect(() => {
