@@ -1,16 +1,16 @@
 # AI feature prompt (Astro + Svelte)
 
-**কোথায়:** `docs/AI feature prompt.md` (এই ফাইল)  
+**Location:** `docs/AI feature prompt.md` (this file)  
 **Rules:** `docs/Rules for Svelte code quality.md`  
 **README:** Section **5** (Engineering Rules) + Section **6** (Code Quality Standards)
 
-React প্রম্পটটা Svelte-এর জন্য এখানেই আপডেট করা আছে। নিচের ব্লক কপি করে চ্যাটে পেস্ট করো।
+The React-oriented prompt was updated here for Svelte. Copy a block below and paste it into chat.
 
 ---
 
-## Single section (সবচেয়ে বেশি লাগবে)
+## Single section (most common)
 
-একটা সেকশন বানাতে এটাই ব্যবহার করো — `[…]` জায়গাগুলো ভরে দাও:
+Use this when building one section — fill in the `[…]` placeholders:
 
 ```md
 # Role & Prerequisites
