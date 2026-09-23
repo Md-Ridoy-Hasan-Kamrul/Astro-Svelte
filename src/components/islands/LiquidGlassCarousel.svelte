@@ -4,7 +4,7 @@
 	 * https://framer.com/m/liquid-glass-carousel-SkrkTr.js@kpCFFax8ciLkuLf0kMrs
 	 * (Three.js glass lens + horizontal panels — no React / Framer.)
 	 */
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import {
 		createLiquidGlassCarousel,
 		DEFAULT_CONFIG,
@@ -36,7 +36,6 @@
 	let entryDone = $state(true);
 	let initError = $state<string | null>(null);
 	let booting = $state(true);
-	let bootNonce = $state(0);
 	let canHover = $state(true);
 
 	const listState = $derived(getListViewState(projects));
@@ -53,12 +52,6 @@
 		handle?.closeFocus();
 	}
 
-	function retryInit() {
-		initError = null;
-		booting = true;
-		bootNonce += 1;
-	}
-
 	function bindHoverMedia() {
 		mediaCleanup?.();
 		mediaCleanup = null;
@@ -73,8 +66,6 @@
 	}
 
 	function destroyHandle() {
-		mediaCleanup?.();
-		mediaCleanup = null;
 		try {
 			handle?.destroy();
 		} catch (error) {
@@ -83,59 +74,79 @@
 		handle = null;
 	}
 
-	onMount(() => {
-		return () => destroyHandle();
-	});
-
-	$effect(() => {
-		const nonce = bootNonce;
-		if (listState === 'empty') {
-			booting = false;
-			initError = null;
-			destroyHandle();
+	function startEngine() {
+		if (!mountEl || listState === 'empty') {
+			booting = listState !== 'empty';
 			return;
 		}
 
+		destroyHandle();
 		booting = true;
 		initError = null;
 		entryDone = !(config.entryAnimation ?? DEFAULT_CONFIG.entryAnimation);
 		bindHoverMedia();
 
-		const frame = requestAnimationFrame(() => {
-			if (!mountEl || nonce !== bootNonce) return;
+		try {
+			handle = createLiquidGlassCarousel(mountEl, {
+				projects,
+				getConfig: () => ({ ...DEFAULT_CONFIG, ...config }),
+				cursorElement: showCursor && canHover ? cursorEl : null,
+				onActiveChange: (i) => {
+					active = i;
+				},
+				onFocusChange: (v) => {
+					focused = v;
+				},
+				onEntryDone: (done) => {
+					entryDone = done;
+				},
+			});
+			booting = false;
+		} catch (error) {
+			console.error('LiquidGlassCarousel failed to initialize', error);
+			initError = 'The carousel could not initialize its graphics engine.';
+			entryDone = true;
+			booting = false;
+		}
+	}
 
-			try {
-				handle?.destroy();
-				handle = createLiquidGlassCarousel(mountEl, {
-					projects,
-					getConfig: () => ({ ...DEFAULT_CONFIG, ...config }),
-					cursorElement: showCursor && canHover ? cursorEl : null,
-					onActiveChange: (i) => {
-						active = i;
-					},
-					onFocusChange: (v) => {
-						focused = v;
-					},
-					onEntryDone: (done) => {
-						entryDone = done;
-					},
-				});
-				booting = false;
-			} catch (error) {
-				console.error('LiquidGlassCarousel failed to initialize', error);
-				initError = 'The carousel could not initialize its graphics engine.';
-				entryDone = true;
-				booting = false;
+	function retryInit() {
+		initError = null;
+		booting = true;
+		queueMicrotask(startEngine);
+	}
+
+	onMount(() => {
+		if (listState === 'empty') {
+			booting = false;
+			return;
+		}
+
+		let cancelled = false;
+		let tries = 0;
+
+		const waitForMount = () => {
+			if (cancelled) return;
+			if (!mountEl) {
+				tries += 1;
+				if (tries < 120) requestAnimationFrame(waitForMount);
+				else {
+					initError = 'The carousel mount node never became ready.';
+					booting = false;
+				}
+				return;
 			}
-		});
+			startEngine();
+		};
+
+		requestAnimationFrame(waitForMount);
 
 		return () => {
-			cancelAnimationFrame(frame);
+			cancelled = true;
+			mediaCleanup?.();
+			mediaCleanup = null;
+			destroyHandle();
 		};
-	});
-
-	onDestroy(() => {
-		destroyHandle();
 	});
 </script>
 

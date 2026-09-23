@@ -130,7 +130,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 ├── src/
 │   ├── components/
 │   │   ├── layout/            # Navbar, Footer
-│   │   ├── sections/          # Hero, Features, HowItWorks, Stack, AboutIntro, FeedbackSection
+│   │   ├── sections/          # Hero, Features, HowItWorks, Stack, Services, FeedbackSection
 │   │   ├── islands/           # InteractiveBook, ToastHost, Navbar, FeedbackForm, carousels…
 │   │   └── ui/                # Icon.svelte, LiquidGlassButton.svelte
 │   ├── assets/                # Local images (hero.jpg → optimized WebP)

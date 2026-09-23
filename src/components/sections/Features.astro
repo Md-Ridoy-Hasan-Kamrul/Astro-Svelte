@@ -109,7 +109,7 @@ const projects = features.map(({ title, body, image }) => ({
 			class="h-[min(70vh,28rem)] w-full overflow-hidden rounded-[1.25rem] min-[640px]:h-[min(78vh,40rem)] min-[900px]:h-[42rem]"
 		>
 			<LiquidGlassCarousel
-				client:visible
+				client:load
 				projects={projects}
 				showLabels={true}
 				showCursor={true}

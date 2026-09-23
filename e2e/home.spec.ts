@@ -34,9 +34,7 @@ test.describe('Home landing page', () => {
       .getByRole('link', { name: 'About' })
       .click();
     await expect(page).toHaveURL(/\/about\/?$/);
-    await expect(
-      page.getByRole('heading', { name: /second route/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('button', { name: /Astro pages/i })).toBeVisible();
   });
 });
 

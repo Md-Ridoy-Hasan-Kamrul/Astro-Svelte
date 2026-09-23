@@ -5,13 +5,14 @@ import { describe, expect, it } from 'vitest';
 import Services from './Services.astro';
 
 describe('Services section', () => {
-	it('renders accordion heading and service titles', async () => {
+	it('renders accordion service titles', async () => {
 		const renderers = await loadRenderers([getContainerRenderer()]);
 		const container = await AstroContainer.create({ renderers });
 		const result = await container.renderToString(Services);
 
 		expect(result).toContain('id="services"');
-		expect(result).toContain('What we ship');
+		expect(result).not.toContain('What we ship');
+		expect(result).not.toContain('Click a row to expand');
 		expect(result).toContain('Astro pages');
 		expect(result).toContain('Svelte islands');
 		expect(result).toContain('Data &amp; feedback');

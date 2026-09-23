@@ -30,25 +30,9 @@ const services = [
 <section
 	id="services"
 	class="border-t border-line py-[clamp(3.5rem,8vw,6rem)]"
-	aria-labelledby="services-title"
+	aria-label="Services"
 >
 	<div class="mx-auto w-[min(100%-2rem,72rem)]">
-		<div class="mb-8 max-w-xl min-[900px]:mb-12">
-			<p class="mb-3 font-display text-xs font-bold uppercase tracking-[0.14em] text-sea">
-				Services
-			</p>
-			<h2
-				id="services-title"
-				class="mb-3 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-tight tracking-tight text-ink"
-			>
-				What we ship
-			</h2>
-			<p class="m-0 text-lg text-ink-soft">
-				Click a row to expand — image and tags reveal like the Framer Service Accordion, using this
-				site’s colors.
-			</p>
-		</div>
-
 		<ServiceAccordion client:visible items={services} />
 	</div>
 </section>
