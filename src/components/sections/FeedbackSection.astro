@@ -19,9 +19,9 @@ import FeedbackForm from '../islands/FeedbackForm.svelte';
 				Try a real mutation
 			</h2>
 			<p class="m-0 max-w-xl text-lg text-ink-soft">
-				Client validation runs first. Valid payloads hit
-				<code class="rounded bg-foam/70 px-1.5 py-0.5 text-[0.95em]">POST /api/feedback</code>
-				and show a success toast.
+				Query shows loading / error / empty / cache for the live repo. The form validates
+				client-side, posts with Axios + TanStack Mutation, and surfaces success or failure
+				inline (plus a toast).
 			</p>
 		</div>
 

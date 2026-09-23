@@ -225,8 +225,20 @@
 			? 'rounded-[6px] border border-[rgb(20_33_43/0.12)] bg-[#eef3f5]/80 px-2 py-1 text-[0.68rem] font-medium leading-snug text-[#3a4a56]'
 			: 'rounded-[6px] border border-[rgb(20_33_43/0.12)] bg-[#eef3f5]/80 px-2.5 py-1.5 text-[0.78rem] font-medium leading-snug text-[#3a4a56]',
 	);
+
+	const hasPages = $derived(pages.length > 0);
 </script>
 
+{#if !hasPages}
+	<div class="mx-auto w-full max-w-md {className}">
+		<p
+			class="m-0 rounded-xl border border-line bg-mist/50 px-4 py-6 text-center text-sm text-ink-soft"
+			role="status"
+		>
+			No skill pages yet — add pages to open the book.
+		</p>
+	</div>
+{:else}
 <div
 	bind:this={stageEl}
 	class="relative mx-auto w-full max-w-full overflow-x-clip overflow-y-visible {className}"
@@ -295,6 +307,7 @@
 		</div>
 	</div>
 </div>
+{/if}
 
 {#snippet faceContent(face: Face)}
 	{#if face.kind === 'cover'}

@@ -12,6 +12,8 @@
 		type LiquidGlassCarouselHandle,
 		type LiquidGlassProject,
 	} from '../../lib/carousel/liquidGlassEngine';
+	import { getListViewState } from '../../lib/query/queryUi';
+	import AsyncStatus from '../ui/AsyncStatus.svelte';
 
 	let {
 		projects,
@@ -33,8 +35,11 @@
 	let focused = $state(false);
 	let entryDone = $state(true);
 	let initError = $state<string | null>(null);
+	let booting = $state(true);
+	let bootNonce = $state(0);
 	let canHover = $state(true);
 
+	const listState = $derived(getListViewState(projects));
 	const merged = $derived({ ...DEFAULT_CONFIG, ...config });
 	const current = $derived(
 		projects[active] ?? { brand: `Project ${active + 1}`, description: '' },
@@ -48,62 +53,89 @@
 		handle?.closeFocus();
 	}
 
-	onMount(() => {
-		entryDone = !(config.entryAnimation ?? DEFAULT_CONFIG.entryAnimation);
+	function retryInit() {
+		initError = null;
+		booting = true;
+		bootNonce += 1;
+	}
 
-		if (typeof window !== 'undefined' && window.matchMedia) {
-			const media = window.matchMedia('(hover: hover) and (pointer: fine)');
-			const update = () => {
-				canHover = media.matches;
-			};
-			update();
-			media.addEventListener?.('change', update);
-			mediaCleanup = () => media.removeEventListener?.('change', update);
-		}
+	function bindHoverMedia() {
+		mediaCleanup?.();
+		mediaCleanup = null;
+		if (typeof window === 'undefined' || !window.matchMedia) return;
+		const media = window.matchMedia('(hover: hover) and (pointer: fine)');
+		const update = () => {
+			canHover = media.matches;
+		};
+		update();
+		media.addEventListener?.('change', update);
+		mediaCleanup = () => media.removeEventListener?.('change', update);
+	}
 
-		if (!mountEl) return;
-
+	function destroyHandle() {
+		mediaCleanup?.();
+		mediaCleanup = null;
 		try {
-			handle = createLiquidGlassCarousel(mountEl, {
-				projects,
-				getConfig: () => ({ ...DEFAULT_CONFIG, ...config }),
-				cursorElement: showCursor && canHover ? cursorEl : null,
-				onActiveChange: (i) => {
-					active = i;
-				},
-				onFocusChange: (v) => {
-					focused = v;
-				},
-				onEntryDone: (done) => {
-					entryDone = done;
-				},
-			});
+			handle?.destroy();
 		} catch (error) {
-			console.error('LiquidGlassCarousel failed to initialize', error);
-			initError = 'The carousel could not initialize its graphics engine.';
-			entryDone = true;
+			console.error('LiquidGlassCarousel destroy failed', error);
+		}
+		handle = null;
+	}
+
+	onMount(() => {
+		return () => destroyHandle();
+	});
+
+	$effect(() => {
+		const nonce = bootNonce;
+		if (listState === 'empty') {
+			booting = false;
+			initError = null;
+			destroyHandle();
+			return;
 		}
 
-		return () => {
-			mediaCleanup?.();
-			mediaCleanup = null;
+		booting = true;
+		initError = null;
+		entryDone = !(config.entryAnimation ?? DEFAULT_CONFIG.entryAnimation);
+		bindHoverMedia();
+
+		const frame = requestAnimationFrame(() => {
+			if (!mountEl || nonce !== bootNonce) return;
+
 			try {
 				handle?.destroy();
+				handle = createLiquidGlassCarousel(mountEl, {
+					projects,
+					getConfig: () => ({ ...DEFAULT_CONFIG, ...config }),
+					cursorElement: showCursor && canHover ? cursorEl : null,
+					onActiveChange: (i) => {
+						active = i;
+					},
+					onFocusChange: (v) => {
+						focused = v;
+					},
+					onEntryDone: (done) => {
+						entryDone = done;
+					},
+				});
+				booting = false;
 			} catch (error) {
-				console.error('LiquidGlassCarousel destroy failed', error);
+				console.error('LiquidGlassCarousel failed to initialize', error);
+				initError = 'The carousel could not initialize its graphics engine.';
+				entryDone = true;
+				booting = false;
 			}
-			handle = null;
+		});
+
+		return () => {
+			cancelAnimationFrame(frame);
 		};
 	});
 
 	onDestroy(() => {
-		mediaCleanup?.();
-		try {
-			handle?.destroy();
-		} catch {
-			/* ignore */
-		}
-		handle = null;
+		destroyHandle();
 	});
 </script>
 
@@ -113,10 +145,33 @@
 	role="region"
 	aria-roledescription="carousel"
 	aria-label="Features carousel"
+	aria-busy={booting || undefined}
 >
-	{#if initError}
-		<p class="grid size-full place-items-center p-8 text-center" role="status">{initError}</p>
+	{#if listState === 'empty'}
+		<div class="grid size-full place-items-center p-6">
+			<AsyncStatus
+				tone="neutral"
+				title="No projects yet"
+				description="Add feature cards to populate the glass carousel."
+			/>
+		</div>
+	{:else if initError}
+		<div class="grid size-full place-items-center p-6">
+			<AsyncStatus
+				tone="danger"
+				title="Carousel unavailable"
+				description={initError}
+				actionLabel="Try again"
+				onAction={retryInit}
+			/>
+		</div>
 	{:else}
+		{#if booting}
+			<div class="pointer-events-none absolute inset-0 z-2 grid place-items-center p-6">
+				<AsyncStatus tone="info" title="Loading carousel…" busy />
+			</div>
+		{/if}
+
 		<div bind:this={mountEl} class="absolute inset-0 touch-none"></div>
 
 		{#if showLabels}

@@ -194,21 +194,21 @@ Canceled Axios requests are not UI errors. 4xx is not retried; network / 5xx ret
 
 Follow official Astro APIs — not `console.log` dumps or extra Redis for this app.
 
-| Practice           | How this repo does it                                                                                                                                                             |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Client JS          | `Navbar` = `client:media` (mobile only). `ToastHost` = `client:idle`. `InteractiveBook` (Stack) / carousel / path = `client:visible` or `client:media`. `FeedbackForm` = `client:load` (about page primary action). |
-| Server islands     | `LiveRepo` uses `server:defer` + `slot="fallback"`. Needs `@astrojs/vercel` (or another server adapter).                                                                          |
-| Prefetch           | `prefetch: { prefetchAll: true }` — hover/focus on **internal** pages (hash links and external docs are skipped).                                                                 |
-| Images             | Hero uses local `<Image>` (WebP, srcset, `fetchpriority=high`); motion only under `motion-safe`.                                                                                  |
-| Fonts              | Self-hosted Figtree + Syne — no render-blocking Google Fonts.                                                                                                                     |
-| Icons              | Tiny SVG `Icon.svelte` — no icon-font CSS.                                                                                                                                        |
-| Route cache        | `cache.provider = memoryCache()`. Always wrap with `Astro.cache.enabled` before `set()` / `invalidate()`. Dev mode is never cached.                                               |
-| API cache          | `fetchAstroRepoCached()` — 5-minute in-memory TTL (one process). Client cache stays in TanStack Query.                                                                            |
-| Asset + HTML cache | `/_astro/*` immutable; HTML `s-maxage=60, stale-while-revalidate=300` (middleware + `_headers`).                                                                                  |
-| Security           | `nosniff`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`; feedback API rate limit.                                                                                   |
-| SEO                | canonical + Open Graph, `robots.txt`, `@astrojs/sitemap`, lean `404`.                                                                                                             |
-| Errors             | `Astro.logger.error()` on server-island fetch failure; Query **Try again** on the client; optional toast via `svelte-sonner`.                                                     |
-| CI                 | GitHub Actions: **Vitest**, **build**, and **Playwright** in parallel → **Quality gate** → optional **Deploy (Vercel)** on `main` when secrets exist.                             |
+| Practice           | How this repo does it                                                                                                                                                                                                                 |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Client JS          | `Navbar` = `client:load` (shared active route/hash + transitions). `ToastHost` = `client:idle`. `InteractiveBook` / carousel / path = `client:visible` or `client:media`. `FeedbackForm` = `client:load` (about page primary action). |
+| Server islands     | `LiveRepo` uses `server:defer` + `slot="fallback"`. Needs `@astrojs/vercel` (or another server adapter).                                                                                                                              |
+| Prefetch           | `prefetch: { prefetchAll: true }` — hover/focus on **internal** pages (hash links and external docs are skipped).                                                                                                                     |
+| Images             | Hero uses local `<Image>` (WebP, srcset, `fetchpriority=high`); motion only under `motion-safe`.                                                                                                                                      |
+| Fonts              | Self-hosted Figtree + Syne — no render-blocking Google Fonts.                                                                                                                                                                         |
+| Icons              | Tiny SVG `Icon.svelte` — no icon-font CSS.                                                                                                                                                                                            |
+| Route cache        | `cache.provider = memoryCache()`. Always wrap with `Astro.cache.enabled` before `set()` / `invalidate()`. Dev mode is never cached.                                                                                                   |
+| API cache          | `fetchAstroRepoCached()` — 5-minute in-memory TTL (one process). Client cache stays in TanStack Query.                                                                                                                                |
+| Asset + HTML cache | `/_astro/*` immutable; HTML `s-maxage=60, stale-while-revalidate=300` (middleware + `_headers`).                                                                                                                                      |
+| Security           | `nosniff`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`; feedback API rate limit.                                                                                                                                       |
+| SEO                | canonical + Open Graph, `robots.txt`, `@astrojs/sitemap`, lean `404`.                                                                                                                                                                 |
+| Errors             | `Astro.logger.error()` on server-island fetch failure; Query **Try again** on the client; optional toast via `svelte-sonner`.                                                                                                         |
+| CI                 | GitHub Actions: **Vitest**, **build**, and **Playwright** in parallel → **Quality gate** → optional **Deploy (Vercel)** on `main` when secrets exist.                                                                                 |
 
 ## 5. Engineering Rules
 

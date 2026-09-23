@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { createAppQueryClient, queryKeys } from './queryClient';
-import { getCacheLabel, getQueryViewState } from './queryUi';
+import {
+	getCacheLabel,
+	getListViewState,
+	getMutationViewState,
+	getQueryViewState,
+} from './queryUi';
 
 describe('createAppQueryClient', () => {
 	it('keeps queries fresh for 1 minute and skips window-focus refetch', () => {
@@ -64,5 +69,31 @@ describe('getCacheLabel', () => {
 		expect(getCacheLabel({ dataUpdatedAt: 0, isStale: false })).toBe('empty');
 		expect(getCacheLabel({ dataUpdatedAt: Date.now(), isStale: false })).toBe('fresh');
 		expect(getCacheLabel({ dataUpdatedAt: Date.now(), isStale: true })).toBe('stale');
+	});
+});
+
+describe('getMutationViewState', () => {
+	it('maps pending, error, success, and idle', () => {
+		expect(
+			getMutationViewState({ isPending: true, isError: false, isSuccess: false }),
+		).toBe('loading');
+		expect(
+			getMutationViewState({ isPending: false, isError: true, isSuccess: false }),
+		).toBe('error');
+		expect(
+			getMutationViewState({ isPending: false, isError: false, isSuccess: true }),
+		).toBe('success');
+		expect(
+			getMutationViewState({ isPending: false, isError: false, isSuccess: false }),
+		).toBe('idle');
+	});
+});
+
+describe('getListViewState', () => {
+	it('treats null, undefined, and [] as empty', () => {
+		expect(getListViewState(null)).toBe('empty');
+		expect(getListViewState(undefined)).toBe('empty');
+		expect(getListViewState([])).toBe('empty');
+		expect(getListViewState(['a'])).toBe('ready');
 	});
 });
