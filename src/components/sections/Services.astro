@@ -1,0 +1,54 @@
+---
+/**
+ * Services — static shell + Service Accordion island.
+ * Framer ref: https://framer.com/m/Service-Accordion-9AKRk0.js@5705lIQS0zFn3fQ1EDtH
+ */
+import ServiceAccordion from '../islands/ServiceAccordion.svelte';
+
+const services = [
+	{
+		title: 'Astro pages',
+		tags: ['Routing', 'Layouts', 'SSR', 'Islands'],
+		image: '/tunnel/01.jpg',
+		imageAlt: 'Astro pages visual',
+	},
+	{
+		title: 'Svelte islands',
+		tags: ['Runes', 'client:*', 'Hydration', 'Forms'],
+		image: '/tunnel/02.jpg',
+		imageAlt: 'Svelte islands visual',
+	},
+	{
+		title: 'Data & feedback',
+		tags: ['Axios', 'TanStack Query', 'Zustand', 'Toasts'],
+		image: '/tunnel/05.jpg',
+		imageAlt: 'Data and feedback visual',
+	},
+];
+---
+
+<section
+	id="services"
+	class="border-t border-line py-[clamp(3.5rem,8vw,6rem)]"
+	aria-labelledby="services-title"
+>
+	<div class="mx-auto w-[min(100%-2rem,72rem)]">
+		<div class="mb-8 max-w-xl min-[900px]:mb-12">
+			<p class="mb-3 font-display text-xs font-bold uppercase tracking-[0.14em] text-sea">
+				Services
+			</p>
+			<h2
+				id="services-title"
+				class="mb-3 font-display text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-tight tracking-tight text-ink"
+			>
+				What we ship
+			</h2>
+			<p class="m-0 text-lg text-ink-soft">
+				Click a row to expand — image and tags reveal like the Framer Service Accordion, using this
+				site’s colors.
+			</p>
+		</div>
+
+		<ServiceAccordion client:visible items={services} />
+	</div>
+</section>
