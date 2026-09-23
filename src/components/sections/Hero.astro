@@ -5,14 +5,14 @@ import LiquidGlassButton from '../ui/LiquidGlassButton.svelte';
 
 <section
 	id="top"
-	class="relative isolate grid min-h-[min(92vh,56rem)] items-end overflow-hidden text-hero"
+	class="relative isolate grid h-screen items-end overflow-hidden text-hero"
 	aria-labelledby="hero-brand"
 >
 	<!-- Infinite Image Tunnel (Framer port) — keeps glass CTAs below -->
 	<div class="absolute inset-0 -z-10" aria-hidden="true">
 		<InfiniteImageTunnel
 			client:load
-			class="h-full min-h-[min(92vh,56rem)]"
+			class="h-full"
 			backgroundColor="#0a0f12"
 			animationSpeed={1}
 		/>
