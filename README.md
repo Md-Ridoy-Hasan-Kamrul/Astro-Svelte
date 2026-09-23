@@ -77,6 +77,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
    - Keep the project portable: another machine should work after `npm install` only.
 10. **Handle loading, error, and empty states cleanly** (Query / mutation flags + inline UI; toast only for user-facing feedback).
 11. **Debug frontend issues and optimize for performance and usability** (islands by priority, usable 320→desktop, fix broken UX before expanding scope).
+12. **Custom mouse cursor (must use project cursors):** Whenever UI needs a cursor (default, pointer/clickable, text/input), use the shared assets in `public/cursors/` via CSS variables `--cursor-site-default`, `--cursor-site-pointer`, `--cursor-site-text` (or classes `.cursor-site-default` / `.cursor-site-pointer` / `.cursor-site-text` in `src/styles/global.css`). Do **not** invent one-off cursors or leave raw `cursor: pointer` on new interactive UI — wire the site cursor instead. Touch / coarse pointers keep the browser default.
 
 ### AI collaboration rules
 
@@ -109,6 +110,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 - [x] Speed harden: self-hosted fonts, deferred islands, local hero LCP, HTML edge cache
 - [x] Lean production: security headers, OG/canonical, sitemap/robots, API rate limit, 404
 - [x] Landing responsive pass (320–desktop) + Stack book island split
+- [x] Shared NeuroField-style site cursors (`public/cursors/` + README rule)
 - [ ] (Add next goals here when the owner shares them)
 
 ---
@@ -226,6 +228,7 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 8. **Valid markup:** Every opened tag must close. Always `class="..."` with quotes for Tailwind.
 9. **Packages:** Project-local installs only; prefer `npx` for one-off CLIs.
 10. **README memory:** New owner prefs/goals → update this README (and Section 5–6 if rules change), then implement.
+11. **Site cursor:** Interactive UI uses `--cursor-site-*` / `.cursor-site-*` from `global.css` + `public/cursors/` — no ad-hoc cursors.
 
 ## 6. Code Quality Standards
 

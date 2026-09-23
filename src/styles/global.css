@@ -4,6 +4,10 @@
 	--font-display: "Syne", system-ui, sans-serif;
 	--font-body: "Figtree Variable", "Figtree", system-ui, sans-serif;
 	--font-mono: "Space Mono", ui-monospace, monospace;
+	/* Shared project cursors — use these wherever a cursor is needed */
+	--cursor-site-default: url("/cursors/default.svg") 16 16, auto;
+	--cursor-site-pointer: url("/cursors/pointer.svg") 16 16, pointer;
+	--cursor-site-text: url("/cursors/text.svg") 16 16, text;
 	--color-ink: #14212b;
 	--color-ink-soft: #3a4a56;
 	--color-mist: #eef3f5;
@@ -43,11 +47,55 @@
 		font-size: 1.0625rem;
 		line-height: 1.6;
 		color: var(--color-ink);
+		cursor: var(--cursor-site-default);
 		background:
 			radial-gradient(120% 80% at 100% 0%, rgb(26 107 115 / 0.12), transparent 55%),
 			radial-gradient(90% 60% at 0% 40%, rgb(196 122 44 / 0.08), transparent 50%),
 			linear-gradient(180deg, var(--color-mist) 0%, var(--color-paper) 40%, #e6eef1 100%);
 		background-attachment: fixed;
+	}
+
+	a,
+	button,
+	[role="button"],
+	[role="tab"],
+	summary,
+	label[for],
+	.cursor-site-pointer {
+		cursor: var(--cursor-site-pointer);
+	}
+
+	input,
+	textarea,
+	select,
+	[contenteditable="true"],
+	.cursor-site-text {
+		cursor: var(--cursor-site-text);
+	}
+
+	:disabled,
+	[aria-disabled="true"] {
+		cursor: not-allowed;
+	}
+
+	.cursor-site-default {
+		cursor: var(--cursor-site-default);
+	}
+
+	/* Map common Tailwind cursor utilities to the project cursors */
+	.cursor-pointer,
+	.cursor-grab,
+	.cursor-grabbing {
+		cursor: var(--cursor-site-pointer);
+	}
+
+	.cursor-text {
+		cursor: var(--cursor-site-text);
+	}
+
+	.cursor-auto,
+	.cursor-default {
+		cursor: var(--cursor-site-default);
 	}
 
 	img {
@@ -107,7 +155,7 @@
 	line-height: 1.25;
 	text-decoration: none;
 	vertical-align: middle;
-	cursor: pointer;
+	cursor: var(--cursor-site-pointer);
 	user-select: none;
 	outline: none;
 	-webkit-tap-highlight-color: transparent;
