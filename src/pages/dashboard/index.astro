@@ -1,0 +1,12 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import DashboardBoard from '../../components/sections/DashboardBoard.astro';
+import ToastHost from '../../components/islands/ToastHost.svelte';
+---
+
+<DashboardLayout title="Crextio — Dashboard">
+	<ToastHost client:idle />
+	<main id="main">
+		<DashboardBoard />
+	</main>
+</DashboardLayout>

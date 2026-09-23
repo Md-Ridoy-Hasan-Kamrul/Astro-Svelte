@@ -1,0 +1,15 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import DashboardSectionPage from '../../components/sections/DashboardSectionPage.astro';
+import ToastHost from '../../components/islands/ToastHost.svelte';
+import { DASHBOARD_SECTIONS } from '../../lib/dashboard/sections';
+
+const section = DASHBOARD_SECTIONS.people;
+---
+
+<DashboardLayout title={`Crextio — ${section.title}`}>
+	<ToastHost client:idle />
+	<main id="main">
+		<DashboardSectionPage section={section} />
+	</main>
+</DashboardLayout>

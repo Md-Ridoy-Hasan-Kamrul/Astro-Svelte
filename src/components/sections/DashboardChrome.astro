@@ -1,0 +1,77 @@
+---
+/**
+ * Crextio top chrome — logo, pill nav, settings / bell / avatar.
+ */
+import { DASHBOARD_NAV, type DashboardNavId } from '../../lib/dashboard/nav';
+
+interface Props {
+	active: DashboardNavId;
+}
+
+const { active } = Astro.props;
+---
+
+<header class="mb-8 flex flex-wrap items-center justify-between gap-4">
+	<a
+		href="/dashboard"
+		class="inline-flex items-center rounded-full border border-[#1c1c1c] px-4 py-1.5 text-sm font-medium tracking-tight text-[#1c1c1c] no-underline"
+	>
+		Crextio
+	</a>
+
+	<nav
+		class="flex max-w-full flex-wrap items-center gap-1 rounded-full bg-white/70 p-1 shadow-[0_10px_30px_rgb(28_28_28_/0.05)] backdrop-blur"
+		aria-label="Dashboard"
+	>
+		{
+			DASHBOARD_NAV.map((item) => (
+				<a
+					href={item.href}
+					aria-current={item.id === active ? 'page' : undefined}
+					class:list={[
+						'rounded-full px-3 py-2 text-[0.8rem] font-medium no-underline transition min-[900px]:px-3.5',
+						item.id === active
+							? 'bg-[#1c1c1c] text-white'
+							: 'text-[#1c1c1c]/75 hover:text-[#1c1c1c]',
+					]}
+				>
+					{item.label}
+				</a>
+			))
+		}
+	</nav>
+
+	<div class="flex items-center gap-2">
+		<button
+			type="button"
+			class="inline-flex items-center gap-2 rounded-full border border-[#1c1c1c]/20 bg-white/80 px-3 py-2 text-sm font-medium text-[#1c1c1c]"
+		>
+			<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+				<path
+					d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z
+					M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9c.2.6.7 1 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"
+					stroke-linecap="round"
+					stroke-linejoin="round"></path>
+			</svg>
+			Setting
+		</button>
+		<button
+			type="button"
+			class="grid size-10 place-items-center rounded-full border border-[#1c1c1c]/15 bg-white/80"
+			aria-label="Notifications"
+		>
+			<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+				<path
+					d="M6 9a6 6 0 1 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9Zm6 13a2.5 2.5 0 0 0 2.5-2.5h-5A2.5 2.5 0 0 0 12 22Z"
+					stroke-linecap="round"></path>
+			</svg>
+		</button>
+		<a
+			href="/login"
+			class="size-10 overflow-hidden rounded-full border border-[#1c1c1c]/15 no-underline"
+			title="Sign out"
+		>
+			<img src="/dashboard/lora.jpg" alt="Admin" class="size-full object-cover" width="40" height="40" />
+		</a>
+	</div>
+</header>
