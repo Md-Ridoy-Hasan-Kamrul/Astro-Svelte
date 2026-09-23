@@ -1,9 +1,7 @@
 ---
 /**
- * Crextio dashboard — pixel-oriented port of the provided Figma/UI reference.
+ * Crextio dashboard home board — chrome lives in DashboardLayout.
  */
-import AuthGate from '../islands/dashboard/AuthGate.svelte';
-import DashboardChrome from './DashboardChrome.astro';
 import SidebarAccordion from '../islands/dashboard/SidebarAccordion.svelte';
 import TimeTracker from '../islands/dashboard/TimeTracker.svelte';
 import OnboardingTasks from '../islands/dashboard/OnboardingTasks.svelte';
@@ -41,11 +39,6 @@ const tasks = [
 	{ id: '5', title: 'HR Policy Review', time: '3:15 pm', icon: 'hr' as const, done: false },
 ];
 ---
-
-<AuthGate client:load />
-
-<div class="mx-auto w-[min(100%-1.25rem,78rem)] py-4 md:py-6">
-	<DashboardChrome active="dashboard" />
 
 	<!-- Welcome + KPIs -->
 	<section class="mb-6 grid gap-5 min-[1100px]:grid-cols-[1.2fr_0.8fr] min-[1100px]:items-end">
@@ -269,7 +262,6 @@ const tasks = [
 			<OnboardingTasks client:visible tasks={tasks} />
 		</div>
 	</div>
-</div>
 
 <style>
 	.cx-stripe {

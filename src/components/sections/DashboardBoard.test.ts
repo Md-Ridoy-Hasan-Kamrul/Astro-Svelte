@@ -10,7 +10,6 @@ describe('DashboardBoard', () => {
 		const container = await AstroContainer.create({ renderers });
 		const result = await container.renderToString(DashboardBoard);
 
-		expect(result).toContain('Crextio');
 		expect(result).toContain('Welcome in, Nixtio');
 		expect(result).toContain('Lora Piterson');
 		expect(result).toContain('Onboarding Task');

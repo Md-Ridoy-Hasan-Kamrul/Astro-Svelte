@@ -1,12 +1,17 @@
 ---
 /**
  * Crextio dashboard chrome — separate from landing Layout/Navbar.
+ * Soft navigations keep the top bar mounted (no navbar shake).
  */
 import '../styles/global.css';
 import '@fontsource-variable/figtree';
 import '@fontsource/syne/600.css';
 import '@fontsource/syne/700.css';
 import '@fontsource/syne/800.css';
+import { ClientRouter } from 'astro:transitions';
+import AuthGate from '../components/islands/dashboard/AuthGate.svelte';
+import DashboardChrome from '../components/islands/dashboard/DashboardChrome.svelte';
+import ToastHost from '../components/islands/ToastHost.svelte';
 
 interface Props {
 	title?: string;
@@ -16,7 +21,7 @@ const { title = 'Crextio Dashboard' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="overflow-x-clip">
+<html lang="en" class="crextio-html overflow-x-clip">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -24,6 +29,7 @@ const { title = 'Crextio Dashboard' } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content="Crextio HR dashboard — admin demo." />
 		<title>{title}</title>
+		<ClientRouter />
 		<style is:global>
 			:root {
 				--cx-bg0: #f3f1ea;
@@ -40,6 +46,11 @@ const { title = 'Crextio Dashboard' } = Astro.props;
 				--cx-shadow: 0 18px 40px rgb(28 28 28 / 0.06);
 			}
 
+			html.crextio-html {
+				/* Stops horizontal “shake” when one tab has a scrollbar and another doesn’t */
+				scrollbar-gutter: stable;
+			}
+
 			body.crextio {
 				min-height: 100svh;
 				margin: 0;
@@ -51,9 +62,23 @@ const { title = 'Crextio Dashboard' } = Astro.props;
 					linear-gradient(160deg, var(--cx-bg0), #faf7ef 45%, var(--cx-bg1));
 				cursor: var(--cursor-site-default);
 			}
+
+			/* Quiet content swap — chrome stays put */
+			::view-transition-old(root),
+			::view-transition-new(root) {
+				animation-duration: 0.12s;
+				animation-timing-function: ease-out;
+			}
 		</style>
 	</head>
 	<body class="crextio overflow-x-clip">
-		<slot />
+		<AuthGate client:load transition:persist="cx-auth" />
+		<ToastHost client:idle transition:persist="cx-toast" />
+		<div class="mx-auto w-[min(100%-1.25rem,78rem)] py-4 md:py-6">
+			<div transition:persist="cx-chrome" class="mb-8">
+				<DashboardChrome client:load />
+			</div>
+			<slot />
+		</div>
 	</body>
 </html>
