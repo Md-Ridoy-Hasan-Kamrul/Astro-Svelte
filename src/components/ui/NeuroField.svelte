@@ -18,6 +18,8 @@
 
 	const LOADER_MASK = `M 0.6 0.515 L 7.4 0.515 C 7.731 0.515 8 0.783 8 1.115 L 8 0 L 0 0 L 0 1.115 C 0 0.783 0.269 0.515 0.6 0.515 Z M 7.4 3.375 L 0.6 3.375 C 0.269 3.375 0 3.107 0 2.775 L 0 5.471 C 0 5.14 0.269 4.871 0.6 4.871 L 7.4 4.871 C 7.731 4.871 8 5.14 8 5.471 L 8 2.775 C 8 3.107 7.731 3.375 7.4 3.375 Z M 7.4 7.732 L 0.6 7.732 C 0.269 7.732 0 7.463 0 7.132 L 0 9.828 C 0 9.497 0.269 9.228 0.6 9.228 L 7.4 9.228 C 7.731 9.228 8 9.497 8 9.828 L 8 7.132 C 8 7.463 7.731 7.732 7.4 7.732 Z M 7.4 12.088 L 0.6 12.088 C 0.269 12.088 0 11.82 0 11.488 L 0 14.185 C 0 13.853 0.269 13.585 0.6 13.585 L 7.4 13.585 C 7.731 13.585 8 13.853 8 14.185 L 8 11.488 C 8 11.82 7.731 12.088 7.4 12.088 Z M 7.4 16.445 L 0.6 16.445 C 0.269 16.445 0 16.176 0 15.845 L 0 18.541 C 0 18.21 0.269 17.941 0.6 17.941 L 7.4 17.941 C 7.731 17.941 8 18.21 8 18.541 L 8 15.845 C 8 16.176 7.731 16.445 7.4 16.445 Z M 7.4 20.802 L 0.6 20.802 C 0.269 20.802 0 20.533 0 20.202 L 0 22.898 C 0 22.566 0.269 22.298 0.6 22.298 L 7.4 22.298 C 7.731 22.298 8 22.566 8 22.898 L 8 20.202 C 8 20.533 7.731 20.802 7.4 20.802 Z M 7.4 25.158 L 0.6 25.158 C 0.269 25.158 0 24.89 0 24.558 L 0 27.254 C 0 26.923 0.269 26.654 0.6 26.654 L 7.4 26.654 C 7.731 26.654 8 26.923 8 27.254 L 8 24.558 C 8 24.89 7.731 25.158 7.4 25.158 Z M 7.4 29.515 L 0.6 29.515 C 0.269 29.515 0 29.246 0 28.915 L 0 30 L 8 30 L 8 28.915 C 8 29.246 7.731 29.515 7.4 29.515 Z`;
 
+	const EYE_W = 32;
+
 	let {
 		id,
 		name,
@@ -51,8 +53,18 @@
 		class?: string;
 	} = $props();
 
+	let revealed = $state(false);
+
 	const hasAction = $derived(Boolean(actionLabel) && !actionOnly);
-	const inputPadRight = $derived(hasAction ? ACTION_W + 4 : 4);
+	const isPassword = $derived(type === 'password');
+	const inputType = $derived(isPassword && revealed ? 'text' : type);
+	const inputPadRight = $derived(
+		hasAction ? ACTION_W + 4 : isPassword ? EYE_W + 4 : 4,
+	);
+
+	function toggleReveal() {
+		revealed = !revealed;
+	}
 </script>
 
 <div
@@ -102,14 +114,14 @@
 				<input
 					{id}
 					{name}
-					{type}
+					type={inputType}
 					{disabled}
 					readonly={readOnly || undefined}
 					{placeholder}
 					bind:value
 					aria-invalid={invalid ? 'true' : undefined}
 					aria-describedby={describedBy}
-					autocomplete={type === 'password' ? 'current-password' : type === 'email' ? 'email' : 'off'}
+					autocomplete={isPassword ? 'current-password' : type === 'email' ? 'email' : 'off'}
 					autocapitalize="off"
 					autocorrect="off"
 					spellcheck="false"
@@ -117,6 +129,37 @@
 					style="padding: 4px {inputPadRight}px 4px 4px; font-family: 'Space Mono', ui-monospace, monospace; caret-color: #fff;"
 					data-neuro-input
 				/>
+
+				{#if isPassword && !hasAction}
+					<button
+						type="button"
+						class="neuro-field__eye absolute inset-y-0 right-0 grid place-items-center border-0 bg-transparent text-white/55 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+						style="width: {EYE_W}px;"
+						aria-label={revealed ? 'Hide password' : 'Show password'}
+						aria-pressed={revealed}
+						disabled={disabled || busy}
+						onclick={toggleReveal}
+					>
+						{#if revealed}
+							<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+								<path
+									d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.1A9.8 9.8 0 0 1 12 5c5 0 9.3 3.1 11 7-.5 1.2-1.3 2.3-2.3 3.2M6.1 6.1C4.2 7.4 2.7 9.1 2 12c1.7 3.9 6 7 10 7 1.4 0 2.7-.3 3.9-.8"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
+						{:else}
+							<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+								<path
+									d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+								<circle cx="12" cy="12" r="3" />
+							</svg>
+						{/if}
+					</button>
+				{/if}
 
 				{#if hasAction}
 					<button

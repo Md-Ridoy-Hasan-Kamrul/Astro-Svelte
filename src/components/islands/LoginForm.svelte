@@ -10,11 +10,18 @@
 		validateLogin,
 		validateSignup,
 	} from '../../lib/auth/validateLogin';
+	import {
+		ADMIN_EMAIL,
+		ADMIN_PASSWORD,
+		DASHBOARD_PATH,
+		isAdminCredentials,
+	} from '../../lib/auth/adminCredentials';
+	import { saveAdminSession } from '../../lib/auth/session';
 	import { getMutationViewState } from '../../lib/query/queryUi';
 	import AsyncStatus from '../ui/AsyncStatus.svelte';
 	import NeuroField from '../ui/NeuroField.svelte';
 
-	const SUBMIT_DELAY_MS = 700;
+	const SUBMIT_DELAY_MS = 450;
 	const FIELD_GAP_PX = 20;
 	const FORM_WIDTH_PX = 294;
 
@@ -22,8 +29,9 @@
 
 	let mode = $state<Mode>('signin');
 	let name = $state('');
-	let email = $state('');
-	let password = $state('');
+	/** Permanent admin credentials — always prefilled for one-click dashboard login. */
+	let email = $state(ADMIN_EMAIL);
+	let password = $state(ADMIN_PASSWORD);
 	let confirmPassword = $state('');
 	let fieldErrors = $state<SignupFieldErrors>({});
 	let pending = $state(false);
@@ -47,8 +55,15 @@
 		fieldErrors = {};
 		formError = null;
 		success = false;
-		password = '';
-		confirmPassword = '';
+		if (next === 'signin') {
+			email = ADMIN_EMAIL;
+			password = ADMIN_PASSWORD;
+			confirmPassword = '';
+			name = '';
+		} else {
+			password = '';
+			confirmPassword = '';
+		}
 	}
 
 	async function onSubmit(event: Event) {
@@ -64,14 +79,22 @@
 				toast.error('Please fix the form');
 				return;
 			}
+
+			if (!isAdminCredentials(parsed.data.email, parsed.data.password)) {
+				fieldErrors = { email: 'Use the prefilled admin account' };
+				formError = 'Demo admin only — keep the prefilled credentials.';
+				toast.error('Admin login required', {
+					description: `${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`,
+				});
+				return;
+			}
+
 			fieldErrors = {};
 			pending = true;
 			await new Promise((resolve) => setTimeout(resolve, SUBMIT_DELAY_MS));
-			pending = false;
-			success = true;
-			toast.success('Signed in', {
-				description: `Welcome back, ${parsed.data.email}`,
-			});
+			saveAdminSession();
+			toast.success('Signed in', { description: 'Opening Crextio dashboard…' });
+			window.location.assign(DASHBOARD_PATH);
 			return;
 		}
 
@@ -149,6 +172,11 @@
 				Sign up
 			</button>
 		</div>
+		{#if mode === 'signin'}
+			<p class="m-0 font-mono text-[0.65rem] leading-relaxed text-white/45">
+				Admin prefilled — click SIGN IN for the dashboard.
+			</p>
+		{/if}
 	</div>
 
 	{#if view === 'loading'}

@@ -78,6 +78,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 10. **Handle loading, error, and empty states cleanly** (Query / mutation flags + inline UI; toast only for user-facing feedback).
 11. **Debug frontend issues and optimize for performance and usability** (islands by priority, usable 320→desktop, fix broken UX before expanding scope).
 12. **Custom mouse cursor (must use project cursors):** Whenever UI needs a cursor (default, pointer/clickable, text/input), use the shared assets in `public/cursors/` via CSS variables `--cursor-site-default`, `--cursor-site-pointer`, `--cursor-site-text` (or classes `.cursor-site-default` / `.cursor-site-pointer` / `.cursor-site-text` in `src/styles/global.css`). Do **not** invent one-off cursors or leave raw `cursor: pointer` on new interactive UI — wire the site cursor instead. Touch / coarse pointers keep the browser default.
+13. **Crextio admin dashboard:** `/login` permanently prefills `admin@crextio.com` / `admin123` — one click **SIGN IN** opens `/dashboard` (Crextio Figma UI). Demo session is client-side only (`sessionStorage`).
 
 ### AI collaboration rules
 
@@ -111,6 +112,7 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 - [x] Lean production: security headers, OG/canonical, sitemap/robots, API rate limit, 404
 - [x] Landing responsive pass (320–desktop) + Stack book island split
 - [x] Shared NeuroField-style site cursors (`public/cursors/` + README rule)
+- [x] Crextio admin dashboard (`/dashboard`) + one-click admin login
 - [ ] (Add next goals here when the owner shares them)
 
 ---
