@@ -26,9 +26,12 @@
 		value = $bindable(''),
 		actionLabel = '',
 		actionType = 'button' as 'button' | 'submit',
+		/** Full-width centered CTA (SIGN IN) instead of docked Framer SUBSCRIBE. */
+		actionOnly = false,
 		disabled = false,
 		invalid = false,
 		busy = false,
+		readOnly = false,
 		describedBy,
 		class: className = '',
 	}: {
@@ -39,15 +42,16 @@
 		value?: string;
 		actionLabel?: string;
 		actionType?: 'button' | 'submit';
+		actionOnly?: boolean;
 		disabled?: boolean;
 		invalid?: boolean;
 		busy?: boolean;
+		readOnly?: boolean;
 		describedBy?: string;
 		class?: string;
 	} = $props();
 
-	const hasAction = $derived(Boolean(actionLabel));
-	/** Always Framer intrinsic width so stacked fields align (no big/small mismatch). */
+	const hasAction = $derived(Boolean(actionLabel) && !actionOnly);
 	const inputPadRight = $derived(hasAction ? ACTION_W + 4 : 4);
 </script>
 
@@ -85,33 +89,45 @@
 		</div>
 
 		<div class="relative min-w-0 flex-1 self-stretch">
-			<input
-				{id}
-				{name}
-				{type}
-				{disabled}
-				{placeholder}
-				bind:value
-				aria-invalid={invalid ? 'true' : undefined}
-				aria-describedby={describedBy}
-				autocomplete={type === 'password' ? 'current-password' : type === 'email' ? 'email' : 'off'}
-				autocapitalize="off"
-				autocorrect="off"
-				spellcheck="false"
-				class="size-full appearance-none border-0 bg-transparent text-[14px] font-normal leading-none text-white outline-none disabled:cursor-not-allowed disabled:opacity-50"
-				style="padding: 4px {inputPadRight}px 4px 4px; font-family: 'Space Mono', ui-monospace, monospace; caret-color: #fff;"
-				data-neuro-input
-			/>
-
-			{#if hasAction}
+			{#if actionOnly && actionLabel}
 				<button
 					type={actionType}
-					class="absolute inset-y-0 right-0 border-0 text-[14px] font-normal uppercase leading-none text-white disabled:cursor-not-allowed disabled:opacity-50"
-					style="width: {ACTION_W}px; background: {ACTION_BG}; font-family: 'Space Mono', ui-monospace, monospace;"
+					class="grid size-full place-items-center border-0 bg-transparent text-[14px] font-normal uppercase leading-none tracking-[0.12em] text-white disabled:cursor-not-allowed disabled:opacity-50"
+					style="font-family: 'Space Mono', ui-monospace, monospace; background: {ACTION_BG};"
 					disabled={disabled || busy}
 				>
 					{busy ? '…' : actionLabel}
 				</button>
+			{:else}
+				<input
+					{id}
+					{name}
+					{type}
+					{disabled}
+					readonly={readOnly || undefined}
+					{placeholder}
+					bind:value
+					aria-invalid={invalid ? 'true' : undefined}
+					aria-describedby={describedBy}
+					autocomplete={type === 'password' ? 'current-password' : type === 'email' ? 'email' : 'off'}
+					autocapitalize="off"
+					autocorrect="off"
+					spellcheck="false"
+					class="size-full appearance-none border-0 bg-transparent text-[14px] font-normal leading-none text-white outline-none disabled:cursor-not-allowed disabled:opacity-50"
+					style="padding: 4px {inputPadRight}px 4px 4px; font-family: 'Space Mono', ui-monospace, monospace; caret-color: #fff;"
+					data-neuro-input
+				/>
+
+				{#if hasAction}
+					<button
+						type={actionType}
+						class="absolute inset-y-0 right-0 border-0 text-[14px] font-normal uppercase leading-none text-white disabled:cursor-not-allowed disabled:opacity-50"
+						style="width: {ACTION_W}px; background: {ACTION_BG}; font-family: 'Space Mono', ui-monospace, monospace;"
+						disabled={disabled || busy}
+					>
+						{busy ? '…' : actionLabel}
+					</button>
+				{/if}
 			{/if}
 		</div>
 
