@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/layout/Navbar.svelte';
 import Hero from '../components/sections/Hero.astro';
 import Features from '../components/sections/Features.astro';
 import HowItWorks from '../components/sections/HowItWorks.astro';
@@ -9,8 +8,7 @@ import Footer from '../components/layout/Footer.astro';
 import ToastHost from '../components/islands/ToastHost.svelte';
 ---
 
-<Layout title="Astro Svelte — Landing">
-	<Navbar client:media="(max-width: 1020px)" surface="dark" />
+<Layout title="Astro Svelte — Landing" navSurface="dark">
 	<ToastHost client:idle />
 	<main id="main" class="overflow-x-clip">
 		<Hero />

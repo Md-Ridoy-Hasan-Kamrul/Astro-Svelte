@@ -4,19 +4,25 @@ import '@fontsource-variable/figtree';
 import '@fontsource/syne/600.css';
 import '@fontsource/syne/700.css';
 import '@fontsource/syne/800.css';
+import { ClientRouter } from 'astro:transitions';
+import Navbar from '../components/layout/Navbar.svelte';
 
 interface Props {
 	title?: string;
 	description?: string;
+	/** Dark over hero; light on About / 404 / other pages. */
+	navSurface?: 'dark' | 'light';
 }
 
 const {
 	title = 'Astro Svelte',
 	description = 'Ship fast static pages with Astro and interactive islands with Svelte.',
+	navSurface = 'light',
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
 const siteName = 'Astro Svelte';
+const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -37,6 +43,7 @@ const siteName = 'Astro Svelte';
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		<title>{title}</title>
+		<ClientRouter />
 	</head>
 	<body class="overflow-x-clip">
 		<a
@@ -45,6 +52,12 @@ const siteName = 'Astro Svelte';
 		>
 			Skip to content
 		</a>
+		<Navbar
+			client:load
+			transition:persist="site-nav"
+			surface={navSurface}
+			currentPath={currentPath}
+		/>
 		<slot />
 	</body>
 </html>

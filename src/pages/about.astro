@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/layout/Navbar.svelte';
 import AboutIntro from '../components/sections/AboutIntro.astro';
 import Services from '../components/sections/Services.astro';
 import FeedbackSection from '../components/sections/FeedbackSection.astro';
@@ -12,7 +11,6 @@ import ToastHost from '../components/islands/ToastHost.svelte';
 	title="About — Astro Svelte"
 	description="Second route demo: Astro page + Svelte feedback form with TanStack Mutation."
 >
-	<Navbar client:media="(max-width: 1020px)" />
 	<ToastHost client:load />
 	<main id="main" class="overflow-x-clip">
 		<AboutIntro />
