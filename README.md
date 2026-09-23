@@ -10,15 +10,15 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 
 ### Level
 
-| Area | Level | Notes |
-| ---- | ----- | ----- |
-| Overall | **Beginner → Intermediate** | Learning by following official docs |
-| Astro | Beginner | Project structure, layouts, pages, `client:*` islands |
-| Svelte 5 | Beginner | Components, runes, hydration in Astro |
-| TypeScript | Beginner | Prefer typed props and simple types |
-| Tailwind | Beginner | Utility classes OK; keep design readable |
-| Zustand / TanStack | Beginner | Use only in **client islands** (`client:load`, etc.) |
-| Testing | Beginner | Vitest (unit/component) + Playwright (E2E) |
+| Area               | Level                       | Notes                                                 |
+| ------------------ | --------------------------- | ----------------------------------------------------- |
+| Overall            | **Beginner → Intermediate** | Learning by following official docs                   |
+| Astro              | Beginner                    | Project structure, layouts, pages, `client:*` islands |
+| Svelte 5           | Beginner                    | Components, runes, hydration in Astro                 |
+| TypeScript         | Beginner                    | Prefer typed props and simple types                   |
+| Tailwind           | Beginner                    | Utility classes OK; keep design readable              |
+| Zustand / TanStack | Beginner                    | Use only in **client islands** (`client:load`, etc.)  |
+| Testing            | Beginner                    | Vitest (unit/component) + Playwright (E2E)            |
 
 ### Language
 
@@ -155,37 +155,37 @@ Learning project: **Astro** pages + **Svelte** islands, with Tailwind, Zustand, 
 
 ## 2. Stack
 
-| Package | Role |
-| ------- | ---- |
-| `astro` | Framework / hybrid (static pages + serverless) |
-| `@astrojs/vercel` | Deploy adapter (server islands + API routes) |
-| `@astrojs/svelte` + `svelte` | UI islands |
-| `tailwindcss` + `@tailwindcss/vite` | Styling |
-| `zustand` | Client state |
-| `@tanstack/svelte-query` | Client server-state / fetching / mutations |
-| `axios` | HTTP client (API layer) |
-| `svelte-sonner` | Toast notifications (Sonner for Svelte; not React `sonner`) |
-| `@fontsource-variable/figtree` + `@fontsource/syne` | Self-hosted fonts (no Google CSS round-trip) |
-| `@astrojs/sitemap` | Sitemap for SEO |
-| `typescript` | Types |
-| `vitest` | Unit + Astro component tests |
-| `@playwright/test` | Full-page E2E |
+| Package                                             | Role                                                        |
+| --------------------------------------------------- | ----------------------------------------------------------- |
+| `astro`                                             | Framework / hybrid (static pages + serverless)              |
+| `@astrojs/vercel`                                   | Deploy adapter (server islands + API routes)                |
+| `@astrojs/svelte` + `svelte`                        | UI islands                                                  |
+| `tailwindcss` + `@tailwindcss/vite`                 | Styling                                                     |
+| `zustand`                                           | Client state                                                |
+| `@tanstack/svelte-query`                            | Client server-state / fetching / mutations                  |
+| `axios`                                             | HTTP client (API layer)                                     |
+| `svelte-sonner`                                     | Toast notifications (Sonner for Svelte; not React `sonner`) |
+| `@fontsource-variable/figtree` + `@fontsource/syne` | Self-hosted fonts (no Google CSS round-trip)                |
+| `@astrojs/sitemap`                                  | Sitemap for SEO                                             |
+| `typescript`                                        | Types                                                       |
+| `vitest`                                            | Unit + Astro component tests                                |
+| `@playwright/test`                                  | Full-page E2E                                               |
 
 ## 3. Data fetching (loading, error, cache, speed)
 
 Roles stay split: **Axios** = HTTP, **TanStack Query** = server cache + UI flags, **Zustand** = client HTTP status (never API payloads).
 
-| Need | What to use |
-| ---- | ----------- |
-| First load | Query `isPending` → loading UI |
-| Background refresh | `isFetching` + cached `data` → keep old data, show “Updating” |
-| Run failed, no cache | `isError` && no `data` → failed panel + **Try again** (`refetch`) |
-| Run failed, cache exists | keep cached UI + error banner |
-| Cache freshness | `staleTime` 60s (fresh), `gcTime` 5 min, **Refresh cache** (`invalidateQueries`) |
-| Mutations (feedback) | `createMutation` + Axios `POST /api/feedback` + toast |
-| HTTP spinner / last error | Zustand `pendingRequests` / `lastError` (Axios interceptors) |
-| User feedback toasts | `svelte-sonner` (`toast.success` / `toast.error`) — not a data store |
-| Super fast | skip extra network while fresh, no refetch on tab focus, abort stale requests (`signal`) |
+| Need                      | What to use                                                                              |
+| ------------------------- | ---------------------------------------------------------------------------------------- |
+| First load                | Query `isPending` → loading UI                                                           |
+| Background refresh        | `isFetching` + cached `data` → keep old data, show “Updating”                            |
+| Run failed, no cache      | `isError` && no `data` → failed panel + **Try again** (`refetch`)                        |
+| Run failed, cache exists  | keep cached UI + error banner                                                            |
+| Cache freshness           | `staleTime` 60s (fresh), `gcTime` 5 min, **Refresh cache** (`invalidateQueries`)         |
+| Mutations (feedback)      | `createMutation` + Axios `POST /api/feedback` + toast                                    |
+| HTTP spinner / last error | Zustand `pendingRequests` / `lastError` (Axios interceptors)                             |
+| User feedback toasts      | `svelte-sonner` (`toast.success` / `toast.error`) — not a data store                     |
+| Super fast                | skip extra network while fresh, no refetch on tab focus, abort stale requests (`signal`) |
 
 Canceled Axios requests are not UI errors. 4xx is not retried; network / 5xx retries once.
 
@@ -193,21 +193,21 @@ Canceled Axios requests are not UI errors. 4xx is not retried; network / 5xx ret
 
 Follow official Astro APIs — not `console.log` dumps or extra Redis for this app.
 
-| Practice | How this repo does it |
-| -------- | --------------------- |
-| Client JS | `Navbar` = `client:media` (mobile only). `ToastHost` / `StartButton` = `client:idle`. `StackDemo` = `client:visible`. `FeedbackForm` = `client:load` (about page primary action). |
-| Server islands | `LiveRepo` uses `server:defer` + `slot="fallback"`. Needs `@astrojs/vercel` (or another server adapter). |
-| Prefetch | `prefetch: { prefetchAll: true }` — hover/focus on **internal** pages (hash links and external docs are skipped). |
-| Images | Hero uses local `<Image>` (WebP, srcset, `fetchpriority=high`); motion only under `motion-safe`. |
-| Fonts | Self-hosted Figtree + Syne — no render-blocking Google Fonts. |
-| Icons | Tiny SVG `Icon.svelte` — no icon-font CSS. |
-| Route cache | `cache.provider = memoryCache()`. Always wrap with `Astro.cache.enabled` before `set()` / `invalidate()`. Dev mode is never cached. |
-| API cache | `fetchAstroRepoCached()` — 5-minute in-memory TTL (one process). Client cache stays in TanStack Query. |
-| Asset + HTML cache | `/_astro/*` immutable; HTML `s-maxage=60, stale-while-revalidate=300` (middleware + `_headers`). |
-| Security | `nosniff`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`; feedback API rate limit. |
-| SEO | canonical + Open Graph, `robots.txt`, `@astrojs/sitemap`, lean `404`. |
-| Errors | `Astro.logger.error()` on server-island fetch failure; Query **Try again** on the client; optional toast via `svelte-sonner`. |
-| CI | GitHub Actions: **Vitest**, **build**, and **Playwright** in parallel → **Quality gate** → optional **Deploy (Vercel)** on `main` when secrets exist. |
+| Practice           | How this repo does it                                                                                                                                                             |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Client JS          | `Navbar` = `client:media` (mobile only). `ToastHost` / `StartButton` = `client:idle`. `StackDemo` = `client:visible`. `FeedbackForm` = `client:load` (about page primary action). |
+| Server islands     | `LiveRepo` uses `server:defer` + `slot="fallback"`. Needs `@astrojs/vercel` (or another server adapter).                                                                          |
+| Prefetch           | `prefetch: { prefetchAll: true }` — hover/focus on **internal** pages (hash links and external docs are skipped).                                                                 |
+| Images             | Hero uses local `<Image>` (WebP, srcset, `fetchpriority=high`); motion only under `motion-safe`.                                                                                  |
+| Fonts              | Self-hosted Figtree + Syne — no render-blocking Google Fonts.                                                                                                                     |
+| Icons              | Tiny SVG `Icon.svelte` — no icon-font CSS.                                                                                                                                        |
+| Route cache        | `cache.provider = memoryCache()`. Always wrap with `Astro.cache.enabled` before `set()` / `invalidate()`. Dev mode is never cached.                                               |
+| API cache          | `fetchAstroRepoCached()` — 5-minute in-memory TTL (one process). Client cache stays in TanStack Query.                                                                            |
+| Asset + HTML cache | `/_astro/*` immutable; HTML `s-maxage=60, stale-while-revalidate=300` (middleware + `_headers`).                                                                                  |
+| Security           | `nosniff`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`; feedback API rate limit.                                                                                   |
+| SEO                | canonical + Open Graph, `robots.txt`, `@astrojs/sitemap`, lean `404`.                                                                                                             |
+| Errors             | `Astro.logger.error()` on server-island fetch failure; Query **Try again** on the client; optional toast via `svelte-sonner`.                                                     |
+| CI                 | GitHub Actions: **Vitest**, **build**, and **Playwright** in parallel → **Quality gate** → optional **Deploy (Vercel)** on `main` when secrets exist.                             |
 
 ## 5. Engineering Rules
 
@@ -226,7 +226,7 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 
 ## 6. Code Quality Standards
 
-1. **One level of abstraction per function** — orchestrate *or* do one concrete job; do not mix.
+1. **One level of abstraction per function** — orchestrate _or_ do one concrete job; do not mix.
 2. **No magic numbers** — name constants (`STALE_MS`, breakpoints helpers, timeouts).
 3. **Svelte 5 runes** — `$props`, `$state`, `$derived`, `$effect` (cleanup on return). No React hooks.
 4. **Typed props & TS** in islands, stores, and `lib/`.
@@ -248,17 +248,17 @@ Follow official Astro APIs — not `console.log` dumps or extra Redis for this a
 
 ## 7. Commands
 
-| Command | Action |
-| ------- | ------ |
-| `npm install` | Install dependencies |
-| `npm run dev` | Dev server → `localhost:4321` |
-| `npm run build` | Build to `./dist/` (Vercel output) |
-| `npm run preview` | Preview production build |
-| `npm run test` | Run Vitest (unit/component) once |
-| `npm run test:watch` | Vitest watch mode |
-| `npm run test:e2e` | Run Playwright E2E |
-| `npm run test:e2e:ui` | Playwright UI mode |
-| `npm run astro ...` | Astro CLI |
+| Command               | Action                             |
+| --------------------- | ---------------------------------- |
+| `npm install`         | Install dependencies               |
+| `npm run dev`         | Dev server → `localhost:4321`      |
+| `npm run build`       | Build to `./dist/` (Vercel output) |
+| `npm run preview`     | Preview production build           |
+| `npm run test`        | Run Vitest (unit/component) once   |
+| `npm run test:watch`  | Vitest watch mode                  |
+| `npm run test:e2e`    | Run Playwright E2E                 |
+| `npm run test:e2e:ui` | Playwright UI mode                 |
+| `npm run astro ...`   | Astro CLI                          |
 
 CI (GitHub Actions): Vitest, build, and Playwright run in parallel; the quality-gate job needs all three. Deploy steps: [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
