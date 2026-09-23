@@ -100,7 +100,7 @@
 					{/each}
 				</nav>
 
-				<LiquidGlassButton href="/#cta" label="Get started" size="sm" />
+				<LiquidGlassButton href="/#stack" label="Get started" size="sm" />
 			</div>
 		</div>
 	</div>
@@ -266,7 +266,7 @@
 						</div>
 					</div>
 					<LiquidGlassButton
-						href="/#cta"
+						href="/#stack"
 						label="Get started"
 						surface={isDark ? 'dark' : 'light'}
 						onclick={close}
