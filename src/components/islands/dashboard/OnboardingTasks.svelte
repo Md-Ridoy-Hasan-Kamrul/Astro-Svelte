@@ -27,7 +27,7 @@
 </script>
 
 <section
-	class="flex h-full min-h-[22rem] flex-col rounded-[1.75rem] bg-[#1c1c1c] p-5 text-white shadow-[0_18px_40px_rgb(28_28_28_/0.12)]"
+	class="flex h-full min-h-88 flex-col rounded-[1.75rem] bg-[#1c1c1c] p-5 text-white shadow-[0_18px_40px_rgb(28_28_28_/0.12)]"
 	aria-labelledby="onboarding-task-title"
 >
 	<div class="mb-4 flex items-center justify-between gap-3">

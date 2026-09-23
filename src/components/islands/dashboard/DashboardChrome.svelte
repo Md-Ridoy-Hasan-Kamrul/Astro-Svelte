@@ -1,12 +1,16 @@
 <script lang="ts">
 	/**
 	 * Crextio top chrome — persists across dashboard soft navigations.
-	 * Active tab follows the current path (no remount shake).
+	 * ≥1021px: desktop pill nav (unchanged).
+	 * ≤1020px: Clean Navbar / fullscreen menu pattern
+	 *   https://framer.com/m/Navbar-hyRhki.js@friRAoG2tHm4FcNBH8sJ
+	 * Breakpoints: Laptop 1020 · Tablet 768 · Mobile L 425 · M 375 · S 320
 	 */
 	import { onMount } from 'svelte';
 	import { DASHBOARD_NAV, type DashboardNavId } from '../../../lib/dashboard/nav';
 
 	let active = $state<DashboardNavId>('dashboard');
+	let open = $state(false);
 
 	function pathToActive(pathname: string): DashboardNavId {
 		const path = pathname.replace(/\/$/, '') || '/';
@@ -20,6 +24,28 @@
 		active = pathToActive(window.location.pathname);
 	}
 
+	function toggle() {
+		open = !open;
+	}
+
+	function close() {
+		open = false;
+	}
+
+	$effect(() => {
+		if (typeof document === 'undefined') return;
+		document.body.style.overflow = open ? 'hidden' : '';
+	});
+
+	$effect(() => {
+		if (typeof document === 'undefined' || !open) return;
+		function onKey(event: KeyboardEvent) {
+			if (event.key === 'Escape') close();
+		}
+		document.addEventListener('keydown', onKey);
+		return () => document.removeEventListener('keydown', onKey);
+	});
+
 	onMount(() => {
 		syncActive();
 		document.addEventListener('astro:page-load', syncActive);
@@ -27,12 +53,14 @@
 		return () => {
 			document.removeEventListener('astro:page-load', syncActive);
 			window.removeEventListener('popstate', syncActive);
+			document.body.style.overflow = '';
 		};
 	});
 </script>
 
+<!-- Desktop ≥1021px — unchanged composition -->
 <header
-	class="cx-chrome grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3"
+	class="cx-chrome hidden w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 min-[1021px]:grid"
 >
 	<a
 		href="/dashboard"
@@ -43,7 +71,7 @@
 	</a>
 
 	<nav
-		class="cx-chrome__nav mx-auto flex h-11 max-w-full items-center gap-0.5 overflow-x-auto overscroll-x-contain rounded-full bg-white/70 p-1 shadow-[0_10px_30px_rgb(28_28_28_/0.05)] backdrop-blur [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+		class="cx-chrome__nav mx-auto flex h-11 max-w-full items-center gap-0.5 overflow-x-auto overscroll-x-contain rounded-full bg-white/70 p-1 shadow-[0_10px_30px_rgb(28_28_28_/0.05)] backdrop-blur [-ms-overflow-style:none] scrollbar-none [&::-webkit-scrollbar]:hidden"
 		aria-label="Dashboard"
 	>
 		{#each DASHBOARD_NAV as item}
@@ -51,7 +79,7 @@
 				href={item.href}
 				data-astro-prefetch
 				aria-current={item.id === active ? 'page' : undefined}
-				class="inline-flex h-9 shrink-0 items-center justify-center rounded-full px-3 text-[0.8rem] font-medium whitespace-nowrap no-underline transition-colors min-[1100px]:px-3.5 {item.id ===
+				class="inline-flex h-9 shrink-0 items-center justify-center rounded-full px-3.5 text-[0.8rem] font-medium whitespace-nowrap no-underline transition-colors {item.id ===
 				active
 					? 'bg-[#1c1c1c] text-white'
 					: 'text-[#1c1c1c]/75 hover:text-[#1c1c1c]'}"
@@ -74,7 +102,7 @@
 					stroke-linejoin="round"
 				/>
 			</svg>
-			<span class="hidden min-[520px]:inline">Setting</span>
+			Setting
 		</button>
 		<button
 			type="button"
@@ -103,3 +131,155 @@
 		</a>
 	</div>
 </header>
+
+<!-- ≤1020px — Laptop / Tablet / Mobile -->
+<div class="min-[1021px]:hidden">
+	<header
+		class="flex h-14 items-center justify-between gap-2 min-[375px]:h-16 min-[768px]:h-18"
+	>
+		<a
+			href="/dashboard"
+			data-astro-prefetch
+			class="inline-flex h-9 shrink-0 items-center rounded-full border border-[#1c1c1c] px-3 text-sm font-medium tracking-tight text-[#1c1c1c] no-underline min-[375px]:px-4"
+			onclick={close}
+		>
+			Crextio
+		</a>
+
+		<div class="flex items-center gap-1.5 min-[375px]:gap-2">
+			<button
+				type="button"
+				class="grid size-9 place-items-center rounded-full border border-[#1c1c1c]/15 bg-white/80 min-[768px]:size-10"
+				aria-label="Notifications"
+			>
+				<svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+					<path
+						d="M6 9a6 6 0 1 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9Zm6 13a2.5 2.5 0 0 0 2.5-2.5h-5A2.5 2.5 0 0 0 12 22Z"
+						stroke-linecap="round"
+					/>
+				</svg>
+			</button>
+			<a
+				href="/login"
+				class="size-9 overflow-hidden rounded-full border border-[#1c1c1c]/15 no-underline min-[768px]:size-10"
+				title="Sign out"
+			>
+				<img
+					src="/dashboard/lora.jpg"
+					alt="Admin"
+					class="size-full object-cover"
+					width="40"
+					height="40"
+				/>
+			</a>
+			<button
+				type="button"
+				class="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border border-[#1c1c1c]/25 bg-white/80 px-3 text-[#1c1c1c] transition hover:bg-white min-[375px]:w-30375px]:px-4 min-[768px]:h-10"
+				aria-expanded={open}
+				aria-controls="cx-fullscreen-menu"
+				aria-label={open ? 'Close' : 'Menu'}
+				onclick={toggle}
+			>
+				<span
+					class="relative hidden h-3.5 w-12 overflow-hidden text-[0.75rem] font-medium uppercase tracking-[0.14em] min-[375px]:block"
+					aria-hidden="true"
+				>
+					<span
+						class="absolute left-0 top-0 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] {open
+							? '-translate-y-2.5 opacity-0'
+							: 'translate-y-0 opacity-100'}"
+					>
+						Menu
+					</span>
+					<span
+						class="absolute left-0 top-0 transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] {open
+							? 'translate-y-0 opacity-100'
+							: 'translate-y-2.5 opacity-0'}"
+					>
+						Close
+					</span>
+				</span>
+				<span class="relative block size-5" aria-hidden="true">
+					<span
+						class="absolute left-px top-1.5 block h-0.5 w-4.5 rounded-xs bg-[#1c1c1c] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] {open
+							? 'top-2.25 rotate-45'
+							: ''}"
+					></span>
+					<span
+						class="absolute left-px top-3 block h-0.5 w-4.5 rounded-xs bg-[#1c1c1c] transition duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] {open
+							? 'top-2.25 -rotate-45'
+							: ''}"
+					></span>
+				</span>
+			</button>
+		</div>
+	</header>
+
+	{#if open}
+		<div
+			id="cx-fullscreen-menu"
+			class="fixed inset-0 z-50 flex flex-col overflow-auto overscroll-contain bg-[#f7f5ef] text-[#1c1c1c] motion-safe:animate-[rise_400ms_ease_both]"
+			role="dialog"
+			aria-modal="true"
+			aria-label="Dashboard menu"
+		>
+			<div
+				class="mx-auto flex h-14 w-[min(100%-1.25rem,78rem)] shrink-0 items-center justify-between gap-3 min-[375px]:h-16 min-[768px]:h-18"
+			>
+				<a
+					href="/dashboard"
+					data-astro-prefetch
+					class="inline-flex h-9 items-center rounded-full border border-[#1c1c1c] px-4 text-sm font-medium no-underline"
+					onclick={close}
+				>
+					Crextio
+				</a>
+				<button
+					type="button"
+					class="inline-flex h-9 w-30 cursor-pointer items-center justify-center gap-2 rounded-full border border-[#1c1c1c]/25 bg-white px-4 text-[#1c1c1c] min-[768px]:h-10"
+					onclick={close}
+				>
+					<span class="text-[0.75rem] font-medium uppercase tracking-[0.14em]">Close</span>
+					<span class="relative block size-5" aria-hidden="true">
+						<span class="absolute left-px top-2.25 block h-0.5 w-4.5 rotate-45 rounded-xs bg-[#1c1c1c]"
+						></span>
+						<span
+							class="absolute left-px top-2.25 block h-0.5 w-4.5 -rotate-45 rounded-xs bg-[#1c1c1c]"
+						></span>
+					</span>
+				</button>
+			</div>
+
+			<nav
+				class="mx-auto flex w-[min(100%-1.25rem,78rem)] flex-1 flex-col gap-1 px-0 pb-10 pt-4"
+				aria-label="Dashboard"
+			>
+				{#each DASHBOARD_NAV as item}
+					<a
+						href={item.href}
+						data-astro-prefetch
+						aria-current={item.id === active ? 'page' : undefined}
+						class="flex items-center justify-between gap-3 border-b border-[#1c1c1c]/10 py-4 no-underline min-[375px]:py-5 min-[768px]:py-6 {item.id ===
+						active
+							? 'text-[#1c1c1c]'
+							: 'text-[#1c1c1c]/55'}"
+						onclick={close}
+					>
+						<span
+							class="font-display text-[clamp(1.75rem,8vw,3.25rem)] font-semibold tracking-tight"
+						>
+							{item.label}
+						</span>
+						{#if item.id === active}
+							<span
+								class="rounded-full bg-[#ffd74b] px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-[#1c1c1c]"
+							>
+								Active
+							</span>
+						{/if}
+					</a>
+				{/each}
+			</nav>
+		</div>
+	{/if}
+</div>

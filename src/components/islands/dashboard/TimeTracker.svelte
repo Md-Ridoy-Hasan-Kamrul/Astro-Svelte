@@ -44,7 +44,7 @@
 </script>
 
 <div
-	class="flex h-full min-h-[16rem] flex-col justify-between rounded-[1.75rem] bg-white p-5 shadow-[0_18px_40px_rgb(28_28_28_/0.06)]"
+	class="flex h-full min-h-64 flex-col justify-between rounded-[1.75rem] bg-white p-5 shadow-[0_18px_40px_rgb(28_28_28_/0.06)]"
 >
 	<div class="mb-1 flex items-center justify-between">
 		<p class="m-0 text-sm font-medium text-[#6b6b6b]">Time tracker</p>
@@ -58,7 +58,7 @@
 			>
 		</button>
 	</div>
-	<div class="relative mx-auto grid size-[9.5rem] place-items-center">
+	<div class="relative mx-auto grid size-38 place-items-center">
 		<svg class="absolute inset-0 size-full -rotate-90" viewBox="0 0 120 120" aria-hidden="true">
 			<circle cx="60" cy="60" r="54" fill="none" stroke="#f0eee8" stroke-width="10"></circle>
 			<circle

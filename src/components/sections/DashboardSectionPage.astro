@@ -17,41 +17,41 @@ function badgeClass(tone: 'dark' | 'yellow' | 'soft' = 'soft') {
 }
 ---
 
-<section class="mb-6">
+<section class="mb-5 min-[768px]:mb-6">
 	<p class="mb-2 font-mono text-sm text-[#6b6b6b]">{section.index}</p>
-	<h1 class="mb-2 font-display text-[clamp(2rem,4vw,2.75rem)] font-semibold tracking-tight text-[#1c1c1c]">
+	<h1 class="mb-2 font-display text-[clamp(1.65rem,5.5vw,2.75rem)] font-semibold tracking-tight text-[#1c1c1c]">
 		{section.title}
 	</h1>
-	<p class="m-0 max-w-2xl text-[#6b6b6b]">{section.subtitle}</p>
+	<p class="m-0 max-w-2xl text-[0.95rem] text-[#6b6b6b] min-[375px]:text-base">{section.subtitle}</p>
 </section>
 
-<div class="mb-5 flex flex-wrap gap-3">
+<div class="mb-4 grid grid-cols-1 gap-3 min-[375px]:grid-cols-3 min-[375px]:gap-3 min-[768px]:mb-5">
 	{
 		section.stats.map((stat) => (
-			<article class="min-w-[8.5rem] flex-1 rounded-[1.5rem] bg-white px-5 py-4 shadow-[0_18px_40px_rgb(28_28_28_/0.06)]">
-				<p class="m-0 text-2xl font-semibold tracking-tight text-[#1c1c1c]">{stat.value}</p>
-				<p class="m-0 mt-1 text-xs text-[#6b6b6b]">{stat.label}</p>
+			<article class="rounded-[1.35rem] bg-white px-4 py-3.5 shadow-[0_18px_40px_rgb(28_28_28_/0.06)] min-[375px]:rounded-[1.5rem] min-[375px]:px-5 min-[375px]:py-4">
+				<p class="m-0 text-xl font-semibold tracking-tight text-[#1c1c1c] min-[375px]:text-2xl">{stat.value}</p>
+				<p class="m-0 mt-1 text-[0.65rem] text-[#6b6b6b] min-[375px]:text-xs">{stat.label}</p>
 			</article>
 		))
 	}
 </div>
 
 <section
-	class="overflow-hidden rounded-[1.75rem] bg-white shadow-[0_18px_40px_rgb(28_28_28_/0.06)]"
+	class="overflow-hidden rounded-[1.35rem] bg-white shadow-[0_18px_40px_rgb(28_28_28_/0.06)] min-[375px]:rounded-[1.75rem]"
 	aria-label={section.title}
 >
 	<ul class="m-0 list-none divide-y divide-[#ece8e0] p-0">
 		{
 			section.rows.map((row) => (
-				<li class="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
-					<div class="min-w-0">
+				<li class="flex flex-wrap items-center justify-between gap-2 px-4 py-3.5 min-[375px]:gap-3 min-[375px]:px-5 min-[375px]:py-4">
+					<div class="min-w-0 flex-1">
 						<p class="m-0 text-sm font-semibold text-[#1c1c1c]">{row.title}</p>
 						<p class="m-0 text-xs text-[#6b6b6b]">{row.meta}</p>
 					</div>
 					{row.badge ? (
 						<span
 							class:list={[
-								'inline-flex rounded-full px-3 py-1 text-xs font-medium',
+								'inline-flex shrink-0 rounded-full px-3 py-1 text-xs font-medium',
 								badgeClass(row.tone),
 							]}
 						>

@@ -74,8 +74,8 @@ const { title = 'Crextio Dashboard' } = Astro.props;
 	<body class="crextio overflow-x-clip">
 		<AuthGate client:load transition:persist="cx-auth" />
 		<ToastHost client:idle transition:persist="cx-toast" />
-		<div class="mx-auto w-[min(100%-1.25rem,78rem)] py-4 md:py-6">
-			<div transition:persist="cx-chrome" class="mb-8">
+		<div class="mx-auto w-[min(100%-1rem,78rem)] py-3 min-[375px]:w-[min(100%-1.25rem,78rem)] min-[375px]:py-4 md:py-6">
+			<div transition:persist="cx-chrome" class="mb-5 min-[768px]:mb-8">
 				<DashboardChrome client:load />
 			</div>
 			<slot />
