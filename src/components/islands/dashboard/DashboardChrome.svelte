@@ -8,6 +8,7 @@
 	 */
 	import { onMount } from 'svelte';
 	import { DASHBOARD_NAV, type DashboardNavId } from '../../../lib/dashboard/nav';
+	import { pauseSmoothScroll, resumeSmoothScroll } from '../../../lib/smoothScroll';
 
 	let active = $state<DashboardNavId>('dashboard');
 	let open = $state(false);
@@ -35,6 +36,8 @@
 	$effect(() => {
 		if (typeof document === 'undefined') return;
 		document.body.style.overflow = open ? 'hidden' : '';
+		if (open) pauseSmoothScroll();
+		else resumeSmoothScroll();
 	});
 
 	$effect(() => {
