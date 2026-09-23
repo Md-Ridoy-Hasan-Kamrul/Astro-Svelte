@@ -50,7 +50,6 @@
 	const links = [
 		{ href: '/#features', label: 'Features' },
 		{ href: '/#how', label: 'How it works' },
-		{ href: '/#live-repo', label: 'Live' },
 		{ href: '/#stack', label: 'Stack' },
 		{ href: '/about', label: 'About' },
 	] as const;
